@@ -103,11 +103,22 @@ def save_model(weights, bias):
     with open("model.json", "w") as file:
         json.dump(data, file)
 
+
+def load_model():
+    """Load weights and bias from json"""
+    with open('model.json', 'r') as file:
+        data = json.load(file)
+    loaded_weights = data["weights"]
+    loaded_bias = data["bias"]
+    return loaded_weights, loaded_bias
+
 def main():
-    weights = [0.7, 0.4, 0.7]
+    weights = [0.0, 0.0, 0.0]
     bias = 0
     counter = 0
 
+    weights, bias = load_model()
+    print(f"{weights}{bias}")
     training_data_set = read_training_data()
 
     # Test read_training_data.csv
