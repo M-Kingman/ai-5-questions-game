@@ -9,6 +9,7 @@ questions = [question_1, question_2, question_3]
 inputs = [0, 0, 0]
 weights = [0.7, 0.4, 0.7]
 bias = 0
+LEARNING_RATE = 0.1
 
 
 def neural_equation(inputs, weights, bias):
@@ -54,9 +55,19 @@ def calculate_error(prediction, target):
 
 
 def seperate_training_row(row):
+    "Takes a row from the training data and seperates it"
     training_inputs = [row[0], row[1], row[2]]
     target = row[3]
     return training_inputs, target
+
+def adjust_weights(inputs, weights, bias, error, learning_rate):
+    new_weights = []
+    for i in range(3):
+        adjustment_needed = inputs[i] * error * learning_rate
+        new_weights.append(weights[i] + adjustment_needed)
+
+    new_bias = bias + (error * learning_rate)
+    return new_weights, new_bias
 
 
 def main():
