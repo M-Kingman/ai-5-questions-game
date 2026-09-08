@@ -49,6 +49,10 @@ def read_training_data():
     return training_data_set
 
 
+def calculate_error(prediction, target):
+    return target - prediction
+
+
 def main():
     counter = 0
 
