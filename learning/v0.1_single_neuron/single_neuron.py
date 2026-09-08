@@ -1,5 +1,6 @@
 import math
 import csv
+import json
 
 question_1 = "Do you struggle to see texts in books/newspapers?"
 question_2 = "Do you struggle to see objects far away?"
@@ -91,6 +92,17 @@ def epochs_training(training_data_set, weights, bias, LEARNING_RATE, EPOCHS):
         new_weights, new_bias = train(training_data_set, new_weights, new_bias, LEARNING_RATE)
     return new_weights, new_bias
 
+
+def save_model(weights, bias):
+    """Saves new weights and bias after training"""
+    data = {
+        "weights": weights,
+        "bias": bias
+    }
+
+    with open("model.json", "w") as file:
+        json.dump(data, file)
+
 def main():
     weights = [0.7, 0.4, 0.7]
     bias = 0
@@ -106,6 +118,8 @@ def main():
     weights, bias = epochs_training(training_data_set, weights, bias, LEARNING_RATE, EPOCHS)
     print("after training")
     print(f"weights: {weights} | bias: {bias}")
+
+    save_model(weights, bias)
 
     # Asks questions and takes users inputs
     while counter < 3:
