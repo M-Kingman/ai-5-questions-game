@@ -8,6 +8,7 @@ question_3 = "Do you struggle to see an object clearly that is 6 meters away?"
 questions = [question_1, question_2, question_3]
 inputs = [0, 0, 0]
 LEARNING_RATE = 0.1
+EPOCHS = 100
 
 
 def neural_equation(inputs, weights, bias):
@@ -58,29 +59,37 @@ def seperate_training_row(row):
     target = row[3]
     return training_inputs, target
 
-def adjust_weights(inputs, weights, bias, error, learning_rate):
+def adjust_weights(inputs, weights, bias, error, LEARNING_RATE):
     """Adjusts weights and bias during training"""
     new_weights = []
     for i in range(3):
-        adjustment_needed = inputs[i] * error * learning_rate
+        adjustment_needed = inputs[i] * error * LEARNING_RATE
         new_weights.append(weights[i] + adjustment_needed)
 
-    new_bias = bias + (error * learning_rate)
+    new_bias = bias + (error * LEARNING_RATE)
     return new_weights, new_bias
 
 
-def train(training_data_set, weights, bias, learning_rate):
+def train(training_data_set, weights, bias, LEARNING_RATE):
     """Runs through training data set to adjust weights and bias """
     for row in range(len(training_data_set)):
         training_inputs, target = (seperate_training_row(training_data_set[row]))
         prediction = neural_equation(training_inputs, weights, bias)
         error = calculate_error(prediction, target)
-        new_weights, new_bias = adjust_weights(training_inputs, weights, bias, error, learning_rate)
+        new_weights, new_bias = adjust_weights(training_inputs, weights, bias, error, LEARNING_RATE)
         weights = new_weights
         bias = new_bias
 
     return weights, bias
 
+
+def epochs_training(training_data_set, weights, bias, LEARNING_RATE, EPOCHS):
+    """Loops over training a fixed amount of times"""
+    new_weights = weights
+    new_bias = bias
+    for epoch in range(EPOCHS):
+        new_weights, new_bias = train(training_data_set, new_weights, new_bias, LEARNING_RATE)
+    return new_weights, new_bias
 
 def main():
     weights = [0.7, 0.4, 0.7]
@@ -94,7 +103,7 @@ def main():
 
     print("before training")
     print(f"weights: {weights} | bias: {bias}")
-    weights, bias = train(training_data_set, weights, bias, LEARNING_RATE)
+    weights, bias = epochs_training(training_data_set, weights, bias, LEARNING_RATE, EPOCHS)
     print("after training")
     print(f"weights: {weights} | bias: {bias}")
 
