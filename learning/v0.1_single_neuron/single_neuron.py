@@ -53,6 +53,12 @@ def calculate_error(prediction, target):
     return target - prediction
 
 
+def seperate_training_row(row):
+    training_inputs = [row[0], row[1], row[2]]
+    target = row[3]
+    return training_inputs, target
+
+
 def main():
     counter = 0
 
