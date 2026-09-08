@@ -1,4 +1,5 @@
 import math
+import csv
 
 question_1 = "Do you struggle to see texts in books/newspapers?"
 question_2 = "Do you struggle to see objects far away?"
@@ -12,7 +13,6 @@ bias = 0
 
 def neural_equation(inputs, weights, bias):
     """Weighted-sum equation (1 neuron)"""
-    answer = ""
     equation = (inputs[0] * weights[0]) + (inputs[1] * weights[1]) + (inputs[2] * weights[2]) + bias
     # Sigmoid Function
     output = 1 / (1 + math.e ** -equation)
@@ -28,8 +28,32 @@ def final_answer(output):
     return answer
 
 
+def read_training_data():
+    """Imports training data set"""
+    training_data_set = []
+    with open('training_data.csv', mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        header = next(reader)
+
+        #Converts each item in a row to an Int, and then appends the row to training_data_set
+        for row in reader:
+            if not row or len(row) != 4:
+                continue
+            row_item_counter = 0
+            temp_data_row = [0, 0, 0, 0]
+            while row_item_counter < 4:
+                temp_data_row[row_item_counter] = int(row[row_item_counter])
+                row_item_counter+=1
+            training_data_set.append(temp_data_row)
+
+    return training_data_set
+
+
 def main():
     counter = 0
+
+    # Test read_training_data.csv
+    print(read_training_data())
 
     # Asks questions and takes users inputs
     while counter < 3:
