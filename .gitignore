@@ -13,3 +13,5 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+learning/v0.1_single_neuron/model.json
