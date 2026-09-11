@@ -49,6 +49,8 @@ def get_player_move():
     start_input = [0, 0]
     end_input = [0, 0]
 
+    combined_inputs = piece_input + start_input + end_input
+
     for i in range(len(questions)):
         validation_check = False
         if i == 0:
@@ -79,7 +81,7 @@ def get_player_move():
                 else:
                     print("Please choose a valid position")
 
-    return piece_input, start_input, end_input
+    return combined_inputs
 
 
 def main():
