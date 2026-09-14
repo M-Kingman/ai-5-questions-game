@@ -11,6 +11,7 @@ class NeuralNetwork:
         self.output_weights = rng.uniform(low=-0.5, high=0.5, size=21)
         self.output_bias = 0.5
         self.learning_rate = 0.1
+        self.epochs = 1000
 
     def sigmoid(self, weighted_sum):
         return 1 / (1 + np.exp(-weighted_sum))
@@ -95,3 +96,27 @@ class NeuralNetwork:
         self.output_weights = self.output_weights - self.learning_rate * backpropagation_data["w2_gradient"]
         self.output_bias = self.output_bias - self.learning_rate * backpropagation_data["b2_gradient"]
 
+    def training(self, training_data):
+        """Runs through training data to update weights and biases"""
+        for epoch in range(self.epochs):
+            total_loss = 0
+
+            for training_row in training_data:
+                # For each row, applies: forward pass, loss calculation, back propagation and updates parameters
+
+                # Separates current row from training data into inputs and target
+                training_inputs = training_row[0:7]
+                training_target = training_row[7]
+
+                prediction, cache = self.forward_pass(training_inputs)
+
+                loss = self.calculate_loss(prediction, training_target)
+                total_loss += loss
+
+                backpropagation_data = self.backpropagation(training_inputs, cache, training_target)
+
+                self.update_parameters(backpropagation_data)
+
+            # Test for during development, to check if loss decreases
+            avg_loss = total_loss / len(training_data)
+            print(f"Epoch {epoch + 1}: loss = {avg_loss} ")

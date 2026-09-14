@@ -112,11 +112,16 @@ def main():
     start_input = [0, 0]
     end_input = [0, 0]
 
+    network = NeuralNetwork()
+
+    training_data = read_training_data()
+    network.training(training_data)
+
     combined_inputs = get_player_move()
 
     #Neural_Network_testing
     print(combined_inputs)
-    network = NeuralNetwork()
+
     prediction, cache = network.forward_pass(combined_inputs)
 
     print(prediction)
