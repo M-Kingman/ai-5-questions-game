@@ -120,3 +120,9 @@ class NeuralNetwork:
             # Test for during development, to check if loss decreases
             avg_loss = total_loss / len(training_data)
             print(f"Epoch {epoch + 1}: loss = {avg_loss} ")
+
+    def update_model(self, input_hidden_weights, hidden_biases, output_weights, output_bias):
+        self.input_hidden_weights = input_hidden_weights
+        self.hidden_biases = hidden_biases
+        self.output_weights = output_weights
+        self.output_bias = output_bias

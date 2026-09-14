@@ -107,6 +107,53 @@ def read_training_data():
     return training_data_set
 
 
+def save_model(network):
+    """Saves new weights and bias to model.json"""
+    data = {
+        "input_hidden_weights": network.input_hidden_weights.tolist(),
+        "hidden_biases": network.hidden_biases.tolist(),
+        "output_weights": network.output_weights.tolist(),
+        "output_bias": network.output_bias
+    }
+
+    with open("model.json", "w", encoding='utf-8') as file:
+        json.dump(data, file)
+
+
+def load_model(network):
+    """Load weights and bias from json"""
+    with open('model.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+
+        input_hidden_weights = numpy.array(data["input_hidden_weights"])
+        hidden_biases = numpy.array(data["hidden_biases"])
+        output_weights = numpy.array(data["output_weights"])
+        output_bias = data["output_bias"]
+
+    network.update_model(input_hidden_weights, hidden_biases, output_weights, output_bias)
+
+
+def main_menu():
+    print("Chess Checker\n===============")
+    menu_choice = 0
+    while menu_choice != '1' and menu_choice != '2' and menu_choice != '3':
+        print("1. Train AI\n2. Play Game\n3. Exit")
+        menu_choice = input()
+    return menu_choice
+
+
+def train_ai(network):
+    training_data = read_training_data()
+    network.training(training_data)
+    save_model(network)
+
+
+def play_game(network):
+    load_model(network)
+    combined_inputs = get_player_move()
+    prediction, cache = network.forward_pass(combined_inputs)
+
+
 def main():
     piece_input = [0, 0, 0]
     start_input = [0, 0]
@@ -114,32 +161,32 @@ def main():
 
     network = NeuralNetwork()
 
-    training_data = read_training_data()
-    network.training(training_data)
 
-    combined_inputs = get_player_move()
 
-    #Neural_Network_testing
-    print(combined_inputs)
 
-    prediction, cache = network.forward_pass(combined_inputs)
+    # print(prediction)
+    # print(cache)
+    # print(network.input_hidden_weights)
+    # print(network.hidden_biases)
+    # print(network.output_weights)
+    # print(network.output_bias)
 
-    print(prediction)
-    #print(cache)
-    print(network.input_hidden_weights)
-    print(network.hidden_biases)
-    print(network.output_weights)
-    print(network.output_bias)
-
-    back_propagation_data = network.backpropagation(combined_inputs, cache, 0)
-    network.update_parameters(back_propagation_data)
-
-    print(network.input_hidden_weights)
-    print(network.hidden_biases)
-    print(network.output_weights)
-    print(network.output_bias)
+    #back_propagation_data = network.backpropagation(combined_inputs, cache, 0)
+    #network.update_parameters(back_propagation_data)
+    #
+    # print(network.input_hidden_weights)
+    # print(network.hidden_biases)
+    # print(network.output_weights)
+    # print(network.output_bias)
 
     print(f"training data \n {read_training_data()}")
+
+    menu_choice = main_menu()
+
+
+
+
+
 
 
 
