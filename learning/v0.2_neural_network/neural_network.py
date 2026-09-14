@@ -10,6 +10,7 @@ class NeuralNetwork:
         self.hidden_biases = rng.uniform(low=-0.5, high=0.5, size=21)
         self.output_weights = rng.uniform(low=-0.5, high=0.5, size=21)
         self.output_bias = 0.5
+        self.learning_rate = 0.1
 
     def sigmoid(self, weighted_sum):
         return 1 / (1 + np.exp(-weighted_sum))
@@ -74,7 +75,7 @@ class NeuralNetwork:
         # Each of the 7 inputs connects to all 21 hidden neurons,
         # so the result must contain 7 × 21 gradients.
         w1_gradient = np.outer(inputs, gradient1)
-        
+
         # one gradient for each hidden bias.
         b1_gradient = gradient1
 
@@ -87,3 +88,9 @@ class NeuralNetwork:
         }
 
         return backpropagation_data
+
+    def update_parameters(self, backpropagation_data):
+        self.input_hidden_weights = self.input_hidden_weights - self.learning_rate * backpropagation_data["w1_gradient"]
+        self.hidden_biases = self.hidden_biases - self.learning_rate * backpropagation_data["b1_gradient"]
+        self.output_weights = self.output_weights - self.learning_rate * backpropagation_data["w2_gradient"]
+        self.output_bias = self.output_bias - self.learning_rate * backpropagation_data["b2_gradient"]
