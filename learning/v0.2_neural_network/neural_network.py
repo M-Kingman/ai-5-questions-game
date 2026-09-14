@@ -35,3 +35,14 @@ class NeuralNetwork:
 
         return prediction, cache
 
+    def calculate_loss(self, prediction, target):
+        """Binary Cross-Entropy (BCE) - to calculate loss"""
+        #Decided on BCE as final output is either 'yes' or 'no'
+        eps = 1e-15
+
+        #safety buffer to prevent prediction from being exactly 1 or 0
+        prediction = np.clip(prediction, eps, 1 - eps)
+
+        loss = -np.mean(target * np.log(prediction) + (1 - target) * np.log(1 - prediction))
+
+        return loss
