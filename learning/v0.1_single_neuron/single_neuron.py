@@ -112,6 +112,7 @@ def load_model():
     loaded_bias = data["bias"]
     return loaded_weights, loaded_bias
 
+
 def main():
     weights = [0.0, 0.0, 0.0]
     bias = 0

@@ -122,6 +122,7 @@ class NeuralNetwork:
             print(f"Epoch {epoch + 1}: loss = {avg_loss} ")
 
     def update_model(self, input_hidden_weights, hidden_biases, output_weights, output_bias):
+        "Uses data from load_model() to update the model weights and biases"
         self.input_hidden_weights = input_hidden_weights
         self.hidden_biases = hidden_biases
         self.output_weights = output_weights

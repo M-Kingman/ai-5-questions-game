@@ -15,3 +15,5 @@ venv/
 Thumbs.db
 
 learning/v0.1_single_neuron/model.json
+
+learning/v0.2_neural_network/model.json
