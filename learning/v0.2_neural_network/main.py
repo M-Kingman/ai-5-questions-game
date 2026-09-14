@@ -97,10 +97,21 @@ def main():
     print(combined_inputs)
     network = NeuralNetwork()
     prediction, cache = network.forward_pass(combined_inputs)
+    
     print(prediction)
-    print(cache)
+    #print(cache)
+    print(network.input_hidden_weights)
+    print(network.hidden_biases)
+    print(network.output_weights)
+    print(network.output_bias)
 
-    print(network.backpropagation(combined_inputs, cache, 0))
+    back_propagation_data = network.backpropagation(combined_inputs, cache, 0)
+    network.update_parameters(back_propagation_data)
+
+    print(network.input_hidden_weights)
+    print(network.hidden_biases)
+    print(network.output_weights)
+    print(network.output_bias)
 
 
 
