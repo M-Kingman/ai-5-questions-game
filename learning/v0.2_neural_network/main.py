@@ -2,32 +2,33 @@ import math
 import numpy
 import csv
 import json
+from neural_network import NeuralNetwork
 
 
 def position_conversion(position):
     """Converts chessboard position to inputs between 0 and 1"""
     conversion_table = {
-        'a': 1,
-        'b': 2,
-        'c': 3,
-        'd': 4,
-        'e': 5,
-        'f': 6,
-        'g': 7,
-        'h': 8,
+        'a': 1, #0
+        'b': 2, #1
+        'c': 3, #2
+        'd': 4, #3
+        'e': 5, #4
+        'f': 6, #5
+        'g': 7, #6
+        'h': 8, #7
     }
 
     # 8 board positions span 7 intervals, so normalize from 0 to 1 using /7
-    x_pos = int(conversion_table[position[0]] - 1) / 7
+    x_pos = (conversion_table[position[0]] - 1) / 7
     y_pos = (int(position[1]) - 1) / 7
-    pos_converted = (x_pos, y_pos)
+    pos_converted = [x_pos, y_pos]
 
     return pos_converted
 
 
 def move_validation(position):
     """"Checks start/end user selected positions are valid"""
-    if len(position) == 2 and position[0].isalpha and position[1].isdigit():
+    if len(position) == 2 and position[0].isalpha() and position[1].isdigit():
         if 1 <= int(position[1]) <= 8:
             if 'a' <= position[0].lower() <= 'h':
                 return True
@@ -49,7 +50,7 @@ def get_player_move():
     start_input = [0, 0]
     end_input = [0, 0]
 
-    combined_inputs = piece_input + start_input + end_input
+
 
     for i in range(len(questions)):
         validation_check = False
@@ -81,6 +82,7 @@ def get_player_move():
                 else:
                     print("Please choose a valid position")
 
+    combined_inputs = piece_input + start_input + end_input
     return combined_inputs
 
 
@@ -89,11 +91,15 @@ def main():
     start_input = [0, 0]
     end_input = [0, 0]
 
-    piece_input, start_input, end_input = get_player_move()
+    combined_inputs = get_player_move()
 
-    print(f"{piece_input}")
-    print(f"{start_input}")
-    print(f"{end_input}")
+    #Neural_Network_testing
+    print(combined_inputs)
+    network = NeuralNetwork()
+    prediction, cache = network.forward_pass(combined_inputs)
+    print(prediction)
+    print(cache)
+
 
 
 if __name__ == "__main__":
