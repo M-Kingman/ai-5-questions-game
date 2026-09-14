@@ -2,6 +2,7 @@ import math
 import numpy
 import csv
 import json
+import sys
 from neural_network import NeuralNetwork
 
 
@@ -50,8 +51,6 @@ def get_player_move():
     start_input = [0, 0]
     end_input = [0, 0]
 
-
-
     for i in range(len(questions)):
         validation_check = False
         if i == 0:
@@ -93,7 +92,7 @@ def read_training_data():
         reader = csv.reader(file)
         header = next(reader)
 
-        #Converts each item in a row to an float, and then appends the row to training_data_set
+        # Converts each item in a row to a float, and then appends the row to training_data_set
         for row in reader:
             if not row or len(row) != 8:
                 continue
@@ -152,42 +151,24 @@ def play_game(network):
     load_model(network)
     combined_inputs = get_player_move()
     prediction, cache = network.forward_pass(combined_inputs)
+    if prediction <= 0.5:
+        print("No, it's an illegal move")
+    else:
+        print("Yes, you can make that play!")
 
 
 def main():
-    piece_input = [0, 0, 0]
-    start_input = [0, 0]
-    end_input = [0, 0]
 
     network = NeuralNetwork()
 
-
-
-
-    # print(prediction)
-    # print(cache)
-    # print(network.input_hidden_weights)
-    # print(network.hidden_biases)
-    # print(network.output_weights)
-    # print(network.output_bias)
-
-    #back_propagation_data = network.backpropagation(combined_inputs, cache, 0)
-    #network.update_parameters(back_propagation_data)
-    #
-    # print(network.input_hidden_weights)
-    # print(network.hidden_biases)
-    # print(network.output_weights)
-    # print(network.output_bias)
-
-    print(f"training data \n {read_training_data()}")
-
-    menu_choice = main_menu()
-
-
-
-
-
-
+    while True:
+        menu_choice = main_menu()
+        if menu_choice == "1":
+            train_ai(network)
+        elif menu_choice == "2":
+            play_game(network)
+        else:
+            sys.exit()
 
 
 if __name__ == "__main__":
