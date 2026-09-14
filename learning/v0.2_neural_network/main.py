@@ -86,6 +86,27 @@ def get_player_move():
     return combined_inputs
 
 
+def read_training_data():
+    """Imports training data set"""
+    training_data_set = []
+    with open('training_data.csv', mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        header = next(reader)
+
+        #Converts each item in a row to an float, and then appends the row to training_data_set
+        for row in reader:
+            if not row or len(row) != 8:
+                continue
+            row_item_counter = 0
+            temp_data_row = [0, 0, 0, 0, 0, 0, 0, 0]
+            while row_item_counter < 8:
+                temp_data_row[row_item_counter] = float(row[row_item_counter])
+                row_item_counter+=1
+            training_data_set.append(temp_data_row)
+
+    return training_data_set
+
+
 def main():
     piece_input = [0, 0, 0]
     start_input = [0, 0]
@@ -97,7 +118,7 @@ def main():
     print(combined_inputs)
     network = NeuralNetwork()
     prediction, cache = network.forward_pass(combined_inputs)
-    
+
     print(prediction)
     #print(cache)
     print(network.input_hidden_weights)
@@ -112,6 +133,8 @@ def main():
     print(network.hidden_biases)
     print(network.output_weights)
     print(network.output_bias)
+
+    print(f"training data \n {read_training_data()}")
 
 
 

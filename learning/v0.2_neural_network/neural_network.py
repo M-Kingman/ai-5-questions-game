@@ -94,3 +94,4 @@ class NeuralNetwork:
         self.hidden_biases = self.hidden_biases - self.learning_rate * backpropagation_data["b1_gradient"]
         self.output_weights = self.output_weights - self.learning_rate * backpropagation_data["w2_gradient"]
         self.output_bias = self.output_bias - self.learning_rate * backpropagation_data["b2_gradient"]
+
