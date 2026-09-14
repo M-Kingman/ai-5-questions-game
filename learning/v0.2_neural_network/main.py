@@ -100,6 +100,8 @@ def main():
     print(prediction)
     print(cache)
 
+    print(network.backpropagation(combined_inputs, cache, 0))
+
 
 
 if __name__ == "__main__":
