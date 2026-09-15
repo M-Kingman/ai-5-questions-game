@@ -1,6 +1,6 @@
 from objects import OBJECTS
 from vision import Vision
-
+from questions import QUESTIONS
 
 def create_objects_data(list_of_objects):
     """Gets the properties for the list of identified objects"""
