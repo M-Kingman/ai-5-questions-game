@@ -2,6 +2,7 @@ from objects import OBJECTS
 from vision import Vision
 from questions import *
 
+
 def create_objects_data(list_of_objects):
     """Gets the properties for the list of identified objects"""
     properties = PROPERTIES.copy()
@@ -37,11 +38,15 @@ def answer_converter(questions_asked):
 
     return converted_answers
 
+def objects_complete_inputs(available_objects_data, converted_answers):
+    """Extends each list from available_objects_data and with answer_converter"""
+    for object_data in available_objects_data:
+        object_data.extend(converted_answers)
 
 def main():
 
     vision = Vision()
-    #print(create_objects_data(vision.detect_objects("../scenes/beach.jpg")))
+    print(create_objects_data(vision.detect_objects("../scenes/beach.jpg")))
 
     #Test answer_converter
     test_question = {
