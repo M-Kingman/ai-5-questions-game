@@ -11,7 +11,7 @@ class NeuralNetwork:
         self.output_weights = rng.uniform(low=-0.5, high=0.5, size=21)
         self.output_bias = 0.5
         self.learning_rate = 0.1
-        self.epochs = 1000
+        self.epochs = 5000
 
     def sigmoid(self, weighted_sum):
         return 1 / (1 + np.exp(-weighted_sum))
@@ -118,8 +118,10 @@ class NeuralNetwork:
                 self.update_parameters(backpropagation_data)
 
             # Test for during development, to check if loss decreases
-            avg_loss = total_loss / len(training_data)
-            print(f"Epoch {epoch + 1}: loss = {avg_loss} ")
+
+            if (epoch + 1) % 100 == 0:
+                avg_loss = total_loss / len(training_data)
+                print(f"Epoch {epoch + 1}: loss = {avg_loss} ")
 
     def update_model(self, input_hidden_weights, hidden_biases, output_weights, output_bias):
         "Uses data from load_model() to update the model weights and biases"

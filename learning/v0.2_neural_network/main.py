@@ -92,17 +92,21 @@ def read_training_data():
         reader = csv.reader(file)
         header = next(reader)
 
-        # Converts each item in a row to a float, and then appends the row to training_data_set
+        # Converts each item in a row to a float & converts position data
         for row in reader:
-            if not row or len(row) != 8:
+            if not row or len(row) != 6:
                 continue
             row_item_counter = 0
-            temp_data_row = [0, 0, 0, 0, 0, 0, 0, 0]
-            while row_item_counter < 8:
-                temp_data_row[row_item_counter] = float(row[row_item_counter])
+            temp_data_row = []
+            while row_item_counter < 6:
+                if row_item_counter == 3 or row_item_counter == 4:
+                    x_pos, y_pos = position_conversion(row[row_item_counter])
+                    temp_data_row.extend([x_pos, y_pos])
+                else:
+                    temp_data_row.append(float(row[row_item_counter]))
                 row_item_counter+=1
             training_data_set.append(temp_data_row)
-
+    print(training_data_set)
     return training_data_set
 
 
@@ -142,8 +146,8 @@ def main_menu():
 
 
 def train_ai(network):
-    training_data = read_training_data()
-    network.training(training_data)
+    training_data_set = read_training_data()
+    network.training(training_data_set)
     save_model(network)
 
 
@@ -155,6 +159,7 @@ def play_game(network):
         print("No, it's an illegal move")
     else:
         print("Yes, you can make that play!")
+        print(prediction)
 
 
 def main():
