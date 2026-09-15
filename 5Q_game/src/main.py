@@ -1,24 +1,10 @@
 from objects import OBJECTS
 from vision import Vision
-from questions import QUESTIONS
+from questions import *
 
 def create_objects_data(list_of_objects):
     """Gets the properties for the list of identified objects"""
-    properties = [
-        "animal",
-        "food",
-        "furniture",
-        "appliance",
-        "vehicle",
-        "tool",
-        "electronic",
-        "holdable",
-        "indoor",
-        "engine",
-        "used_for_work",
-        "four_wheels",
-        "pet",
-        "healthy"]
+    properties = PROPERTIES.copy()
 
     available_objects_data = []
 
@@ -36,10 +22,45 @@ def create_objects_data(list_of_objects):
 
     return available_objects_data
 
+
+def answer_converter(questions_asked):
+    """converts all 14 questions into a 4 digit numerical value"""
+    question_list = QUESTION_LIST.copy()
+    converted_answers = []
+
+    for key in questions_asked:
+        question_list[key] = questions_asked[key]
+
+    for key in question_list:
+        question_answer = question_list[key]
+        converted_answers.extend(ANSWERS[question_answer])
+
+    return converted_answers
+
+
 def main():
 
     vision = Vision()
-    print(create_objects_data(vision.detect_objects("../scenes/beach.jpg")))
+    #print(create_objects_data(vision.detect_objects("../scenes/beach.jpg")))
+
+    #Test answer_converter
+    test_question = {
+        "animal": "no",
+        "food": "no",
+        "furniture": "not_asked",
+        "appliance": "not_asked",
+        "vehicle": "yes",
+        "tool": "not_asked",
+        "electronic": "not_asked",
+        "holdable": "not_asked",
+        "indoor": "sometimes",
+        "engine": "not_asked",
+        "used_for_work": "not_asked",
+        "four_wheels": "not_asked",
+        "pet": "not_asked",
+        "healthy": "not_asked"}
+    print(answer_converter(test_question))
+
 
 if __name__ == "__main__":
     main()
