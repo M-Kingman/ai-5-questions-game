@@ -1,4 +1,3 @@
-import math
 import numpy
 import csv
 import json
@@ -106,7 +105,6 @@ def read_training_data():
                     temp_data_row.append(float(row[row_item_counter]))
                 row_item_counter+=1
             training_data_set.append(temp_data_row)
-    print(training_data_set)
     return training_data_set
 
 
@@ -159,7 +157,6 @@ def play_game(network):
         print("No, it's an illegal move")
     else:
         print("Yes, you can make that play!")
-        print(prediction)
 
 
 def main():

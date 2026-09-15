@@ -1,5 +1,4 @@
 import numpy as np
-import math
 
 rng = np.random.default_rng()
 
@@ -117,8 +116,7 @@ class NeuralNetwork:
 
                 self.update_parameters(backpropagation_data)
 
-            # Test for during development, to check if loss decreases
-
+            # To track if loss decreases during training
             if (epoch + 1) % 100 == 0:
                 avg_loss = total_loss / len(training_data)
                 print(f"Epoch {epoch + 1}: loss = {avg_loss} ")
