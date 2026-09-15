@@ -1,6 +1,7 @@
 from objects import OBJECTS
 from vision import Vision
 from questions import *
+from object_probability import ObjectProbability
 
 
 def create_objects_data(list_of_objects):
@@ -14,8 +15,8 @@ def create_objects_data(list_of_objects):
         properties_values = []
         item_data = OBJECTS[item]
 
-        for property in properties:
-            properties_values.append(item_data[property])
+        for object_property in properties:
+            properties_values.append(item_data[object_property])
 
         complete_data_row.append(item)
         complete_data_row.extend(properties_values)
@@ -38,17 +39,36 @@ def answer_converter(questions_asked):
 
     return converted_answers
 
+
 def objects_complete_inputs(available_objects_data, converted_answers):
     """Extends each list from available_objects_data and with answer_converter"""
+
     for object_data in available_objects_data:
         object_data.extend(converted_answers)
+
+    return available_objects_data
+
+
+def probability_checker(completed_objects_data, network_probability):
+    """Assigns a probability value to each object using ObjectProbability"""
+    probability_list = {}
+
+    for data_object in completed_objects_data:
+        object_name = data_object[0]
+        input_data = data_object[1:]
+        prediction, cache = network_probability.forward_pass(input_data)
+        probability_list[object_name] = prediction
+
+    return probability_list
+
 
 def main():
 
     vision = Vision()
-    print(create_objects_data(vision.detect_objects("../scenes/beach.jpg")))
+    network_probability = ObjectProbability()
+    available_objects_data = create_objects_data(vision.detect_objects("../scenes/beach.jpg"))
 
-    #Test answer_converter
+    # Test answer_converter
     test_question = {
         "animal": "no",
         "food": "no",
@@ -64,7 +84,10 @@ def main():
         "four_wheels": "not_asked",
         "pet": "not_asked",
         "healthy": "not_asked"}
-    print(answer_converter(test_question))
+    converted_answers = answer_converter(test_question)
+    completed_objects_data = objects_complete_inputs(available_objects_data, converted_answers)
+    probability_list = probability_checker(completed_objects_data, network_probability)
+    print(probability_list)
 
 
 if __name__ == "__main__":

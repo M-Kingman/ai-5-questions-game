@@ -4,6 +4,7 @@ import numpy as np
 
 rng = np.random.default_rng()
 
+
 class ObjectProbability:
     def __init__(self):
         self.input_hidden_weights = rng.uniform(low=-0.5, high=0.5, size=(70, 20))
