@@ -84,7 +84,7 @@ OBJECTS = {
         "healthy": 0
     },
 
-    "fridge": {
+    "refrigerator": {
         "animal": 0,
         "food": 0,
         "furniture": 0,
@@ -186,7 +186,7 @@ OBJECTS = {
         "healthy": 1
     },
 
-    "motorbike": {
+    "motorcycle": {
         "animal": 0,
         "food": 0,
         "furniture": 0,

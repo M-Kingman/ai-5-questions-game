@@ -18,6 +18,3 @@ class Vision:
         objects = list(set(objects))
         return objects
 
-# Testing
-vision = Vision()
-print(vision.detect_objects("../scenes/kitchen.jpg"))
