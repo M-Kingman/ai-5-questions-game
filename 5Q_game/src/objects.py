@@ -1,3 +1,4 @@
+# 1 = yes, 0.5 = sometimes, 0 = no
 OBJECTS = {
     "rhino": {
         "animal": 1,
@@ -25,7 +26,7 @@ OBJECTS = {
         "tool": 0,
         "electronic": 0,
         "holdable": 0,
-        "indoor": 0,
+        "indoor": 0.5,
         "engine": 0,
         "used_for_work": 0,
         "four_wheels": 0,
@@ -42,11 +43,11 @@ OBJECTS = {
         "tool": 0,
         "electronic": 0,
         "holdable": 1,
-        "indoor": 1,
+        "indoor": 0.5,
         "engine": 0,
         "used_for_work": 0,
         "four_wheels": 0,
-        "pet": 1,
+        "pet": 0.5,
         "healthy": 0
     },
 
@@ -76,9 +77,9 @@ OBJECTS = {
         "tool": 0,
         "electronic": 0,
         "holdable": 0,
-        "indoor": 1,
+        "indoor": 0.5,
         "engine": 0,
-        "used_for_work": 1,
+        "used_for_work": 0.5,
         "four_wheels": 0,
         "pet": 0,
         "healthy": 0
@@ -129,7 +130,7 @@ OBJECTS = {
         "holdable": 0,
         "indoor": 1,
         "engine": 0,
-        "used_for_work": 1,
+        "used_for_work": 0.5,
         "four_wheels": 0,
         "pet": 0,
         "healthy": 0
@@ -146,7 +147,7 @@ OBJECTS = {
         "holdable": 1,
         "indoor": 1,
         "engine": 0,
-        "used_for_work": 1,
+        "used_for_work": 0.5,
         "four_wheels": 0,
         "pet": 0,
         "healthy": 0
@@ -159,11 +160,11 @@ OBJECTS = {
         "appliance": 0,
         "vehicle": 1,
         "tool": 0,
-        "electronic": 1,
+        "electronic": 0.5,
         "holdable": 0,
         "indoor": 0,
         "engine": 1,
-        "used_for_work": 1,
+        "used_for_work": 0.5,
         "four_wheels": 1,
         "pet": 0,
         "healthy": 0
@@ -176,11 +177,11 @@ OBJECTS = {
         "appliance": 0,
         "vehicle": 1,
         "tool": 0,
-        "electronic": 0,
+        "electronic": 0.5,
         "holdable": 0,
         "indoor": 0,
         "engine": 0,
-        "used_for_work": 1,
+        "used_for_work": 0.5,
         "four_wheels": 0,
         "pet": 0,
         "healthy": 1
@@ -193,11 +194,11 @@ OBJECTS = {
         "appliance": 0,
         "vehicle": 1,
         "tool": 0,
-        "electronic": 0,
+        "electronic": 0.5,
         "holdable": 0,
         "indoor": 0,
         "engine": 1,
-        "used_for_work": 1,
+        "used_for_work": 0.5,
         "four_wheels": 0,
         "pet": 0,
         "healthy": 0
@@ -210,11 +211,11 @@ OBJECTS = {
         "appliance": 0,
         "vehicle": 1,
         "tool": 0,
-        "electronic": 0,
+        "electronic": 0.5,
         "holdable": 1,
         "indoor": 0,
         "engine": 0,
-        "used_for_work": 1,
+        "used_for_work": 0,
         "four_wheels": 0,
         "pet": 0,
         "healthy": 1
@@ -265,7 +266,7 @@ OBJECTS = {
         "holdable": 1,
         "indoor": 1,
         "engine": 0,
-        "used_for_work": 1,
+        "used_for_work": 0.5,
         "four_wheels": 0,
         "pet": 0,
         "healthy": 0
