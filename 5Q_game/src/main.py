@@ -4,6 +4,31 @@ from questions import *
 from object_probability import ObjectProbability
 
 
+def all_objects_data(list_of_objects):
+    """Assigns values to all objects. Values depend on whether object is present"""
+    # Used by QuestionSelector
+
+    present_objects = create_objects_data(list_of_objects)
+    complete_objects_data = []
+
+    for item in OBJECTS:
+        object_found = False
+        complete_data_row = []
+        not_selected_item_values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]
+
+        for present_item in present_objects:
+            if present_item[0] == item:
+                object_found = True
+                complete_data_row = present_item
+
+        if not object_found:
+            complete_data_row.append(item)
+            complete_data_row.extend(not_selected_item_values)
+
+        complete_objects_data.append(complete_data_row)
+
+    return complete_objects_data
+
 def create_objects_data(list_of_objects):
     """Gets the properties for the list of identified objects"""
     properties = PROPERTIES.copy()
@@ -41,7 +66,7 @@ def answer_converter(questions_asked):
 
 
 def objects_complete_inputs(available_objects_data, converted_answers):
-    """Extends each list from available_objects_data and with answer_converter"""
+    """Extends each list from available_objects_data with answer_converter"""
 
     for object_data in available_objects_data:
         object_data.extend(converted_answers)
@@ -66,7 +91,8 @@ def main():
 
     vision = Vision()
     network_probability = ObjectProbability()
-    available_objects_data = create_objects_data(vision.detect_objects("../scenes/beach.jpg"))
+    detected_objects = vision.detect_objects("../scenes/beach.jpg")
+    available_objects_data = create_objects_data(detected_objects)
 
     # Test answer_converter
     test_question = {
@@ -87,8 +113,12 @@ def main():
     converted_answers = answer_converter(test_question)
     completed_objects_data = objects_complete_inputs(available_objects_data, converted_answers)
     probability_list = probability_checker(completed_objects_data, network_probability)
-    print(probability_list)
+    #print(probability_list)
 
+    # test for all_objects_data
+    test_data = all_objects_data(detected_objects)
+    print(detected_objects)
+    print(test_data)
 
 if __name__ == "__main__":
     main()

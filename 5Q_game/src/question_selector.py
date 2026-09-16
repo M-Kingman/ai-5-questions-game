@@ -134,3 +134,14 @@ class QuestionSelector:
         self.hidden_biases = hidden_biases
         self.output_weights = output_weights
         self.output_bias = output_bias
+
+
+# Test
+test_nn = QuestionSelector()
+random_test_data = rng.uniform(low=0.0, high=1, size=297)
+results, cache = test_nn.forward_pass(random_test_data)
+random_target = (rng.uniform(low=0.1, high=0.9, size=14))
+backpropagation_data = test_nn.backpropagation(random_test_data, cache, random_target)
+
+print(f"Results of forward pass: \n{results}")
+print(f"Results of back propagation: \n{backpropagation_data}")
