@@ -5,6 +5,7 @@ from object_probability import ObjectProbability
 import sys
 import random
 from pathlib import Path
+from PIL import Image
 
 
 def all_objects_data(list_of_objects):
@@ -97,7 +98,12 @@ def probability_checker(completed_objects_data, network_probability):
 def get_random_scene():
     """Picks a random image from the scenes folder"""
 
-    scenes_folder = Path(".../scenes")
+    # Get the folder containing main.py
+    src_folder = Path(__file__).resolve().parent
+
+    # Go from src -> 5Q_game -> scenes
+    scenes_folder = src_folder.parent / "scenes"
+
     image_extensions = [".jpg"]
 
     images = [
@@ -111,14 +117,29 @@ def get_random_scene():
     return random.choice(images)
 
 
-def play_game():
+def play_game(vision, ):
     print("You will be provided a random scene."
           "\nPick an object from the scene and keep it in mind"
           "\nThe game will then ask you 5 questions, answer as best as you can"
           "\nOnce done, the game will guess what object you picked")
 
-    scene = get_random_scene()
+    scene_path = get_random_scene()
 
+    # Displays the selected scene to the player
+    image = Image.open(scene_path)
+    image.show()
+
+    player_ready = False
+
+    while not player_ready:
+        print("\n\nType 'yes' once you're ready for the questions")
+        player_input = input().lower()
+        if player_input == 'yes':
+            player_ready = True
+
+    detected_objects = vision.detect_objects(str(scene_path))
+
+    complete_objects_data, object_present_indicator = all_objects_data(detected_objects)
 
 def main():
 
@@ -126,13 +147,14 @@ def main():
     network_probability = ObjectProbability()
 
     print("Welcome to the 5 Questions Game\n___________________________")
+
     menu_choice = 0
     while menu_choice != '1' and menu_choice != '2' and menu_choice != '3':
         print("1. Play Game\n2. Neural Network Training\n3. Exit")
         menu_choice = input()
 
         if menu_choice == "1":
-            play_game()
+            play_game(vision)
             menu_choice = 0
             print("1. Press anything to play again\n2.Exit")
 
@@ -162,8 +184,6 @@ def main():
 
 
 
-    available_objects_data = create_objects_data(detected_objects)
-
     # Test answer_converter
     test_question = {
         "animal": "no",
@@ -180,16 +200,6 @@ def main():
         "four_wheels": "not_asked",
         "pet": "not_asked",
         "healthy": "not_asked"}
-    converted_answers = answer_converter(test_question)
-    completed_objects_data = objects_complete_inputs(available_objects_data, converted_answers)
-    probability_list = probability_checker(completed_objects_data, network_probability)
-    # print(probability_list)
-
-    # test for all_objects_data
-    test_data, object_present_indicator = all_objects_data(detected_objects)
-    print(detected_objects)
-    print(test_data)
-    print(f"Object present indicator: \n {object_present_indicator}")
 
 
 if __name__ == "__main__":

@@ -9,6 +9,7 @@ class Vision:
         """Returns a unique list of objects that are in the scene"""
         results = self.model(image_path)[0]
         objects = []
+
         for object in results.boxes:
             class_id = int(object.cls[0])
             object_name = self.model.names[class_id]
