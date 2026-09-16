@@ -10,6 +10,7 @@ def all_objects_data(list_of_objects):
 
     present_objects = create_objects_data(list_of_objects)
     complete_objects_data = []
+    object_present_indicator = []
 
     for item in OBJECTS:
         object_found = False
@@ -20,14 +21,17 @@ def all_objects_data(list_of_objects):
             if present_item[0] == item:
                 object_found = True
                 complete_data_row = present_item
+                object_present_indicator.append(1)
 
         if not object_found:
             complete_data_row.append(item)
             complete_data_row.extend(not_selected_item_values)
+            object_present_indicator.append(0)
 
         complete_objects_data.append(complete_data_row)
 
-    return complete_objects_data
+    return complete_objects_data, object_present_indicator
+
 
 def create_objects_data(list_of_objects):
     """Gets the properties for the list of identified objects"""
@@ -116,9 +120,10 @@ def main():
     #print(probability_list)
 
     # test for all_objects_data
-    test_data = all_objects_data(detected_objects)
+    test_data, object_present_indicator = all_objects_data(detected_objects)
     print(detected_objects)
     print(test_data)
+    print(f"Object present indicator: \n {object_present_indicator}")
 
 if __name__ == "__main__":
     main()

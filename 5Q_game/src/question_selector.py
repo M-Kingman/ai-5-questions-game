@@ -2,9 +2,17 @@ import numpy as np
 rng = np.random.default_rng()
 
 # NN Structure
-# Inputs: 297
-# Hidden Layer: 20
-# Output: 14
+#   Inputs: 297 =
+#       224 object properties: 16 objects * 14 properties
+#       16 Object present indicator: Shows whether a object is present
+#       56 previous question answers: Gives values to questions already asked
+#       1 Question(s) remaining: Input between 0 and 1, depending on amount of questions left
+#   Hidden Layer neurons: 20
+#   Output: 14 (Question bank)
+
+
+def sigmoid(weighted_sum):
+    return 1 / (1 + np.exp(-weighted_sum))
 
 
 class QuestionSelector:
@@ -18,18 +26,15 @@ class QuestionSelector:
         self.learning_rate = 0.1
         self.epochs = 5000
 
-    def sigmoid(self, weighted_sum):
-        return 1 / (1 + np.exp(-weighted_sum))
-
     def forward_pass(self, inputs):
         # Layer 1 - Hidden layer
         weighted_sum1 = np.dot(inputs, self.input_hidden_weights) + self.hidden_biases
         # Activation function
-        activation1 = self.sigmoid(weighted_sum1)
+        activation1 = sigmoid(weighted_sum1)
 
         # Layer 2 - Output layer
         weighted_sum2 = np.dot(activation1, self.output_weights) + self.output_bias
-        activation2 = self.sigmoid(weighted_sum2)
+        activation2 = sigmoid(weighted_sum2)
 
         # Stores data for backpropagation
         cache = {
