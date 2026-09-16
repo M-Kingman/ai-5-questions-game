@@ -169,8 +169,10 @@ def main():
             train_ai(network)
         elif menu_choice == "2":
             play_game(network)
-        else:
+        elif menu_choice == "3":
             sys.exit()
+        else:
+            print("Please make a valid selection")
 
 
 if __name__ == "__main__":
