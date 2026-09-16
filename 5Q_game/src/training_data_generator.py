@@ -5,6 +5,7 @@ from questions import *
 from main import answer_converter, create_objects_data, objects_complete_inputs
 
 class TrainingDataGenerator:
+    """creates training data for the ObjectProbability NN"""
 
     def __init__(self, number_of_games):
         self.number_of_games = number_of_games
@@ -26,6 +27,7 @@ class TrainingDataGenerator:
             random_properties.append(random_properties_key)
 
         return target_object_key, target_object_properties, random_properties
+
 
     def create_NN_inputs(self, target_object_key, target_object_properties, random_properties):
         """"Converts all OBJECTS + random questions + target into NN inputs """
@@ -53,6 +55,23 @@ class TrainingDataGenerator:
         return combined_numerical_data
 
 
+    def add_training_targets(self, target_object_key, combined_numerical_data):
+        """Appends either 1 or 0 to each object"""
+
+        for data_row in combined_numerical_data:
+            if data_row[0] == target_object_key:
+                data_row.append(1)
+            else:
+                data_row.append(0)
+
+        # For easier naming
+        completed_data = combined_numerical_data
+
+        return completed_data
+
+
 test_train = TrainingDataGenerator(500)
 target_object_key, target_object_properties, random_properties = test_train.random_selection()
 combined_numerical_data = test_train.create_NN_inputs(target_object_key, target_object_properties, random_properties)
+completed_data = test_train.add_training_targets(target_object_key, combined_numerical_data)
+print(completed_data)
