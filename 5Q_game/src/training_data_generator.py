@@ -70,8 +70,20 @@ class TrainingDataGenerator:
         return completed_data
 
 
-test_train = TrainingDataGenerator(500)
-target_object_key, target_object_properties, random_properties = test_train.random_selection()
-combined_numerical_data = test_train.create_NN_inputs(target_object_key, target_object_properties, random_properties)
-completed_data = test_train.add_training_targets(target_object_key, combined_numerical_data)
-print(completed_data)
+    def generate_training_data(self):
+        """Generates training data based off of number of simulated games"""
+
+        complete_data_sim_pack = []
+
+        for game in range(self.number_of_games):
+            target_object_key, target_object_properties, random_properties = self.random_selection()
+            combined_numerical_data = self.create_NN_inputs(target_object_key, target_object_properties, random_properties)
+            completed_data = self.add_training_targets(target_object_key, combined_numerical_data)
+
+            complete_data_sim_pack.append(completed_data)
+
+        return complete_data_sim_pack
+
+
+train_test = TrainingDataGenerator(5)
+print(train_test.generate_training_data())
