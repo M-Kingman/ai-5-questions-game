@@ -3,6 +3,8 @@ from vision import Vision
 from questions import *
 from object_probability import ObjectProbability
 import sys
+import random
+from pathlib import Path
 
 
 def all_objects_data(list_of_objects):
@@ -92,11 +94,30 @@ def probability_checker(completed_objects_data, network_probability):
     return probability_list
 
 
+def get_random_scene():
+    """Picks a random image from the scenes folder"""
+
+    scenes_folder = Path(".../scenes")
+    image_extensions = [".jpg"]
+
+    images = [
+        image for image in scenes_folder.iterdir()
+        if image.suffix.lower() in image_extensions
+    ]
+
+    if not images:
+        return None
+
+    return random.choice(images)
+
+
 def play_game():
     print("You will be provided a random scene."
           "\nPick an object from the scene and keep it in mind"
           "\nThe game will then ask you 5 questions, answer as best as you can"
           "\nOnce done, the game will guess what object you picked")
+
+    scene = get_random_scene()
 
 
 def main():
@@ -140,7 +161,7 @@ def main():
             print("please make a valid selection")
 
 
-    detected_objects = vision.detect_objects("../scenes/beach.jpg")
+
     available_objects_data = create_objects_data(detected_objects)
 
     # Test answer_converter
