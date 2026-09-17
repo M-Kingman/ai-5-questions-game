@@ -8,11 +8,12 @@ from pathlib import Path
 from PIL import Image
 
 
-def all_objects_data(list_of_objects):
+def all_objects_data(detected_objects):
     """Assigns values to all objects. Values depend on whether object is present"""
+    # Also assigns a 1 or 0 to indicate if object was detected
     # Used by QuestionSelector
 
-    present_objects = create_objects_data(list_of_objects)
+    present_objects = create_objects_data(detected_objects)
     complete_objects_data = []
     object_present_indicator = []
 
@@ -34,16 +35,19 @@ def all_objects_data(list_of_objects):
 
         complete_objects_data.append(complete_data_row)
 
+    # 16 objects * 14 properties = 224 values
+    # 16 object indicators
+    # total: 240 values
     return complete_objects_data, object_present_indicator
 
 
-def create_objects_data(list_of_objects):
+def create_objects_data(detected_objects):
     """Gets the properties for the list of identified objects"""
     properties = PROPERTIES.copy()
 
     available_objects_data = []
 
-    for item in list_of_objects:
+    for item in detected_objects:
         complete_data_row = []
         properties_values = []
         item_data = OBJECTS[item]
@@ -55,11 +59,14 @@ def create_objects_data(list_of_objects):
         complete_data_row.extend(properties_values)
         available_objects_data.append(complete_data_row)
 
+    # Total objects detected * 14 properties
     return available_objects_data
 
 
 def answer_converter(questions_asked):
     """converts all 14 questions into a 4 digit numerical value"""
+    # Gets updated after each question
+    #  following format [0, 0, 0, 0]
     question_list = QUESTION_LIST.copy()
     converted_answers = []
 
@@ -70,6 +77,7 @@ def answer_converter(questions_asked):
         question_answer = question_list[key]
         converted_answers.extend(ANSWERS[question_answer])
 
+    # Total values: 56 (14 * 4)
     return converted_answers
 
 
@@ -121,7 +129,7 @@ def play_game(vision, ):
     print("You will be provided a random scene."
           "\nPick an object from the scene and keep it in mind"
           "\nThe game will then ask you 5 questions, answer as best as you can"
-          "\nOnce done, the game will guess what object you picked")
+          "\nOnce done, the game will guess which object you picked")
 
     scene_path = get_random_scene()
 
