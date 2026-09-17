@@ -2,11 +2,12 @@ import numpy as np
 rng = np.random.default_rng()
 
 # NN Structure
-#   Inputs: 297 =
+#   Inputs: 313 =
 #       224 object properties: 16 objects * 14 properties
 #       16 Object present indicator: Shows whether a object is present
 #       56 previous question answers: Gives values to questions already asked
 #       1 Question(s) remaining: Input between 0 and 1, depending on amount of questions left
+#       16 object probabilities: After each question NN2 will update probabilities
 #   Hidden Layer neurons: 20
 #   Output: 14 (Question bank)
 
@@ -19,7 +20,7 @@ class QuestionSelector:
     """Predicts the next best question to ask"""
 
     def __init__(self):
-        self.input_hidden_weights = rng.uniform(low=-0.5, high=0.5, size=(297, 20))
+        self.input_hidden_weights = rng.uniform(low=-0.5, high=0.5, size=(313, 20))
         self.hidden_biases = rng.uniform(low=-0.5, high=0.5, size=20)
         self.output_weights = rng.uniform(low=-0.5, high=0.5, size=(20, 14))
         self.output_bias = rng.uniform(low=-0.5, high=0.5, size=14)
@@ -116,8 +117,8 @@ class QuestionSelector:
                 # For each row, applies: forward pass, loss calculation, back propagation and updates parameters
 
                 # Separates current row from training data into inputs and target
-                training_inputs = training_row[:297]
-                training_target = training_row[297:]
+                training_inputs = training_row[:313]
+                training_target = training_row[313:]
 
                 prediction, cache = self.forward_pass(training_inputs)
 
@@ -143,7 +144,7 @@ class QuestionSelector:
 
 # Test
 test_nn = QuestionSelector()
-random_test_data = rng.uniform(low=0.0, high=1, size=297)
+random_test_data = rng.uniform(low=0.0, high=1, size=313)
 results, cache = test_nn.forward_pass(random_test_data)
 random_target = (rng.uniform(low=0.1, high=0.9, size=14))
 backpropagation_data = test_nn.backpropagation(random_test_data, cache, random_target)

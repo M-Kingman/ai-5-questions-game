@@ -141,6 +141,7 @@ def play_game(vision, ):
 
     complete_objects_data, object_present_indicator = all_objects_data(detected_objects)
 
+
 def main():
 
     vision = Vision()
