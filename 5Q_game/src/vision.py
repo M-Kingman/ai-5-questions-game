@@ -10,8 +10,8 @@ class Vision:
         results = self.model(image_path)[0]
         objects = []
 
-        for object in results.boxes:
-            class_id = int(object.cls[0])
+        for detected_object in results.boxes:
+            class_id = int(detected_object.cls[0])
             object_name = self.model.names[class_id]
             objects.append(object_name)
 
