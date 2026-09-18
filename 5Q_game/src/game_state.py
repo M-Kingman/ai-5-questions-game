@@ -62,3 +62,19 @@ class GameState:
 
         return all_object_states
 
+    def get_all_objects_inputs(self):
+        """Gets the numerical state inputs for all objects"""
+
+        all_object_inputs = []
+
+        for object_state in OBJECTS:
+            object_state = self.object_states[object_state]
+            current_object = object_state.get_object_state_inputs()
+            all_object_inputs.extend(current_object)
+
+        return all_object_inputs
+
+
+# test
+test_state = GameState(["dog", "fork"])
+print(test_state.get_all_objects_inputs())
