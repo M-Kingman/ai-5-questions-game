@@ -17,6 +17,9 @@ class ObjectState:
         # Changes throughout game
         self.probability = probability
 
+    def get_object_state_inputs(self):
+        """Returns the objects numerical state inputs"""
 
+        return self.property_input_values + [self.indicator] + [self.probability]
 
 
