@@ -15,8 +15,8 @@ class GameState:
         # Keeps track of which questions have been asked
         self.question_tracker = QUESTION_LIST.copy()
 
-        # Uses question tracker to convert question states into numerical inputs
-        self.answer_input_list = [[0, 0, 0, 0] for _ in range(14)]
+        # Stores question states as numerical inputs
+        self.answer_input_list = [0] * 56
 
         # Tracks how many questions have been asked
         self.questions_asked = 0
@@ -73,6 +73,18 @@ class GameState:
             all_object_inputs.extend(current_object)
 
         return all_object_inputs
+
+
+def answer_converter(self):
+    """Converts the question tracker into numerical inputs."""
+
+    converted_answers = []
+
+    for key in self.question_tracker:
+        question_answer = self.question_tracker[key]
+        converted_answers.extend(ANSWERS[question_answer])
+
+    self.answer_input_list = converted_answers
 
 
 # test
