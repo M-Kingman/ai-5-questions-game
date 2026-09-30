@@ -109,7 +109,7 @@ class QuestionSelector:
 
     def training(self, training_data):
         """Runs through training data to update weights and biases"""
-        # 311 training values (inputs + 14 targets)
+        # 327 training values (inputs + 14 targets)
         for epoch in range(self.epochs):
             total_loss = 0
 
