@@ -1,6 +1,7 @@
 from game_state import GameState
 from question_selector import QuestionSelector
 from object_probability import ObjectProbability
+from questions import QUESTIONS, ANSWERS
 
 
 class QuestionSystem:
@@ -53,6 +54,30 @@ class QuestionSystem:
         question_to_ask = max(ranked_questions, key=ranked_questions.get)
 
         return question_to_ask
+
+    def ask_question(self):
+        """Gets player input for chosen question and updates question_tracker and answer_input_list"""
+
+        question_to_ask = self.select_question()
+
+        print(QUESTIONS[question_to_ask])
+        print("Select the number which corresponds to the correct answer:\n")
+        print("1. 'Yes'\n 2. 'No' \n 3. 'Sometimes' \n 4. 'Unsure'")
+
+        player_answer = input().lower()
+
+        # Updates question_tracker
+        if player_answer == '1':
+            self.game_state.question_tracker[question_to_ask] = "yes"
+        elif player_answer == '2':
+            self.game_state.question_tracker[question_to_ask] = "no"
+        elif player_answer == '3':
+            self.game_state.question_tracker[question_to_ask] = "sometimes"
+        else:
+            self.game_state.question_tracker[question_to_ask] = "unsure"
+
+        # Updates answer_input_list
+        self.game_state.answer_converter()
 
     def update_probabilities(self):
         """Updates the probability for detected objects using ObjectProbability"""
