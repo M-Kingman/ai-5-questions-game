@@ -79,6 +79,15 @@ class QuestionSystem:
         # Updates answer_input_list
         self.game_state.answer_converter()
 
+    def update_progress(self):
+        """Updates question count and checks if game is over"""
+
+        self.game_state.questions_asked += 1
+        self.game_state.questions_remaining = (5 - self.game_state.questions_asked) / 5
+
+        if self.game_state.questions_asked >= self.max_questions:
+            self.game_state.game_over = True
+
     def update_probabilities(self):
         """Updates the probability for detected objects using ObjectProbability"""
 
@@ -92,3 +101,5 @@ class QuestionSystem:
                 prediction, cache = self.object_probability.forward_pass(input_data)
 
                 object_state.probability = prediction
+
+
