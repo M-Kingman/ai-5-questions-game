@@ -5,9 +5,9 @@ rng = np.random.default_rng()
 #   Inputs: 313 =
 #       224 object properties: 16 objects * 14 properties
 #       16 Object present indicator: Shows whether a object is present
+#       16 object probabilities: After each question NN2 will update probabilities
 #       56 previous question answers: Gives values to questions already asked
 #       1 Question(s) remaining: Input between 0 and 1, depending on amount of questions left
-#       16 object probabilities: After each question NN2 will update probabilities
 #   Hidden Layer neurons: 20
 #   Output: 14 (Question bank)
 

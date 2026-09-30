@@ -18,7 +18,13 @@ class QuestionSystem:
     def prepare_input(self):
         """Prepares all the needed inputs for the QuestionSelector NN."""
 
-        object_states = self.game_state.object_states
+        object_states = self.game_state.get_all_objects_inputs()
+        answer_input_list = self.game_state.answer_input_list
+        questions_remaining = [self.game_state.questions_remaining]
+
+        question_selector_input_data = (object_states + answer_input_list + questions_remaining)
+
+        return question_selector_input_data
 
 
     def update_probabilities(self):
