@@ -1,11 +1,12 @@
-from objects import OBJECTS
 from vision import Vision
-from questions import *
 from object_probability import ObjectProbability
 import sys
 import random
 from pathlib import Path
 from PIL import Image
+from game_state import GameState
+from question_selector import QuestionSelector
+from question_system import QuestionSystem
 
 
 def get_random_scene():
@@ -30,7 +31,7 @@ def get_random_scene():
     return random.choice(images)
 
 
-def play_game(vision, ):
+def play_game(vision, nn_object_probability, nn_question_selector):
     print("You will be provided a random scene."
           "\nPick an object from the scene and keep it in mind"
           "\nThe game will then ask you 5 questions, answer as best as you can"
@@ -51,14 +52,16 @@ def play_game(vision, ):
             player_ready = True
 
     detected_objects = vision.detect_objects(str(scene_path))
+    game_state = GameState(detected_objects)
+    question_system = QuestionSystem(game_state,  nn_object_probability, nn_question_selector)
 
-    complete_objects_data, object_present_indicator = all_objects_data(detected_objects)
 
 
 def main():
 
     vision = Vision()
-    network_probability = ObjectProbability()
+    nn_object_probability = ObjectProbability()
+    nn_question_selector = QuestionSelector()
 
     print("Welcome to the 5 Questions Game\n___________________________")
 
@@ -68,7 +71,7 @@ def main():
         menu_choice = input()
 
         if menu_choice == "1":
-            play_game(vision)
+            play_game(vision, nn_object_probability, nn_question_selector)
             menu_choice = 0
             print("1. Press anything to play again\n2.Exit")
 
@@ -95,25 +98,6 @@ def main():
 
         else:
             print("please make a valid selection")
-
-
-
-    # Test answer_converter
-    test_question = {
-        "animal": "no",
-        "food": "no",
-        "furniture": "not_asked",
-        "appliance": "not_asked",
-        "vehicle": "yes",
-        "tool": "not_asked",
-        "electronic": "not_asked",
-        "holdable": "not_asked",
-        "indoor": "sometimes",
-        "engine": "not_asked",
-        "used_for_work": "not_asked",
-        "four_wheels": "not_asked",
-        "pet": "not_asked",
-        "healthy": "not_asked"}
 
 
 if __name__ == "__main__":
