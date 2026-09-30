@@ -55,6 +55,14 @@ def play_game(vision, nn_object_probability, nn_question_selector):
     game_state = GameState(detected_objects)
     question_system = QuestionSystem(game_state,  nn_object_probability, nn_question_selector)
 
+    while game_state.game_over is not True:
+        question_system.ask_question()
+        question_system.update_probabilities()
+        question_system.update_progress()
+
+    system_object_guess = question_system.get_best_answer()
+
+    print(f"Did you choose the following object: {system_object_guess}")
 
 
 def main():

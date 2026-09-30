@@ -74,19 +74,13 @@ class GameState:
 
         return all_object_inputs
 
+    def answer_converter(self):
+        """Converts the question tracker into numerical inputs."""
 
-def answer_converter(self):
-    """Converts the question tracker into numerical inputs."""
+        converted_answers = []
 
-    converted_answers = []
+        for key in self.question_tracker:
+            question_answer = self.question_tracker[key]
+            converted_answers.extend(ANSWERS[question_answer])
 
-    for key in self.question_tracker:
-        question_answer = self.question_tracker[key]
-        converted_answers.extend(ANSWERS[question_answer])
-
-    self.answer_input_list = converted_answers
-
-
-# test
-test_state = GameState(["dog", "fork"])
-print(test_state.get_all_objects_inputs())
+        self.answer_input_list = converted_answers

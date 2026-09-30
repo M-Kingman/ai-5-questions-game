@@ -26,7 +26,7 @@ class QuestionSystem:
     def get_question_scores(self):
         """Passes prepare_input data into QuestionSelector NN and returns scores"""
 
-        question_scores, = self.question_selector.forward_pass(self.prepare_input())
+        question_scores, cache = self.question_selector.forward_pass(self.prepare_input())
         return question_scores
 
     def select_question(self):
@@ -59,7 +59,7 @@ class QuestionSystem:
 
         print(QUESTIONS[question_to_ask])
         print("Select the number which corresponds to the correct answer:\n")
-        print("1. 'Yes'\n 2. 'No' \n 3. 'Sometimes' \n 4. 'Unsure'")
+        print(" 1. 'Yes'\n 2. 'No' \n 3. 'Sometimes' \n 4. 'Unsure'")
 
         player_answer = input().lower()
 
@@ -99,4 +99,16 @@ class QuestionSystem:
 
                 object_state.probability = prediction
 
+    def get_best_answer(self):
+        """Gets the highest probability object for the final answer"""
 
+        highest_probability_object = None
+
+        # loops through all objects to get the highest probability
+        for object_state in self.game_state.object_states.values():
+            if highest_probability_object is None:
+                highest_probability_object = object_state
+            elif object_state.probability > highest_probability_object.probability:
+                highest_probability_object = object_state
+
+        return highest_probability_object.name
