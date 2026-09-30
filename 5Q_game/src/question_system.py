@@ -14,7 +14,6 @@ class QuestionSystem:
         self.question_selector = question_selector
         self.object_probability = object_probability
 
-
     def prepare_input(self):
         """Prepares all the needed inputs for the QuestionSelector NN."""
 
@@ -26,6 +25,34 @@ class QuestionSystem:
 
         return question_selector_input_data
 
+    def get_question_scores(self):
+        """Passes prepare_input data into QuestionSelector NN and returns scores"""
+
+        question_scores, = self.question_selector.forward_pass(self.prepare_input())
+        return question_scores
+
+    def select_question(self):
+        """Filters out already asked questions and selects the highest scoring question"""
+
+        question_scores = self.get_question_scores()
+
+        ranked_questions = {}
+        question_scores_index = 0
+
+        # Filters out already asked questions
+        for question in self.game_state.question_tracker:
+
+            if self.game_state.question_tracker[question] == "not_asked":
+                ranked_questions[question] = question_scores[question_scores_index]
+            else:
+                ranked_questions[question] = 0
+
+            question_scores_index += 1
+
+        # Gets the key for the question with the highest score
+        question_to_ask = max(ranked_questions, key=ranked_questions.get)
+
+        return question_to_ask
 
     def update_probabilities(self):
         """Updates the probability for detected objects using ObjectProbability"""
