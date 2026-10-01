@@ -29,6 +29,8 @@ class GameState:
         # Stores all 16 objects from ObjectState
         self.object_states = self.create_object_states()
 
+        self.final_guess_is_correct = None
+
     def create_object_states(self):
         """Creates an ObjectState object for each OBJECT and sets its state,
         depending on if it was detected"""
@@ -82,3 +84,23 @@ class GameState:
             converted_answers.extend(ANSWERS[question_answer])
 
         self.answer_input_list = converted_answers
+
+    def player_reveal(self, system_object_guess):
+
+        print(f"Did you choose the following object: {system_object_guess}")
+        print("\nType:"
+              "\n\t'Y' for yes"
+              "\n\t'N' for no")
+
+        already_revealed = False
+
+        while not already_revealed:
+            player_reveal = input()
+            if player_reveal == 'Y':
+                self.final_guess_is_correct = True
+                already_revealed = True
+            elif player_reveal == 'N':
+                self.final_guess_is_correct = False
+                already_revealed = True
+            else:
+                print("Invalid input")

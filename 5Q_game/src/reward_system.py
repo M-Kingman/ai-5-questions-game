@@ -25,10 +25,11 @@ class RewardSystem:
     """Calculates question rewards and final game rewards for the QuestionSelector.
     Uses a simple reinforcement learning approach based on game feedback."""
 
-    def __init__(self,):
+    def __init__(self, game_state):
         self.elimination_points = 0
         self.entropy_points = 0
         self.final_guess_points = 0
+        self.game_state = game_state
 
     def elimination_reward(self, objects_start, objects_end):
         N = objects_start
@@ -38,9 +39,17 @@ class RewardSystem:
         round_points = N ** 2 * E * F
         self.elimination_points += round_points
 
+    def final_guess_reward(self):
+
+        if self.game_state.final_guess_is_correct:
+            self.final_guess_points = 1
+        else:
+            self.final_guess_points = -1
+
+
 if __name__ == "__main__":
 
     # Test
-    reward_test = RewardSystem()
-    calculated_reward = reward_test.elimination_reward(4, 2) # Removed return statement
-    print(f"{calculated_reward}")
+    # reward_test = RewardSystem()
+    # calculated_reward = reward_test.elimination_reward(4, 2) # Removed return statement
+    # print(f"{calculated_reward}")

@@ -8,7 +8,7 @@ from game_state import GameState
 from question_selector import QuestionSelector
 from question_system import QuestionSystem
 from model_manager import ModelManager
-
+from reward_system import RewardSystem
 
 def get_random_scene():
     """Picks a random image from the scenes folder"""
@@ -55,6 +55,7 @@ def play_game(vision, nn_object_probability, nn_question_selector):
     detected_objects = vision.detect_objects(str(scene_path))
     game_state = GameState(detected_objects)
     question_system = QuestionSystem(game_state,  nn_object_probability, nn_question_selector)
+    reward_system = RewardSystem(game_state)
 
     while game_state.game_over is not True:
         question_system.ask_question()
@@ -62,8 +63,11 @@ def play_game(vision, nn_object_probability, nn_question_selector):
         question_system.update_progress()
 
     system_object_guess = question_system.get_best_answer()
+    game_state.player_reveal(system_object_guess)
+    reward_system.final_guess_reward()
 
-    print(f"Did you choose the following object: {system_object_guess}")
+
+
 
 
 def main():
