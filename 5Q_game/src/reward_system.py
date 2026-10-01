@@ -50,18 +50,24 @@ class RewardSystem:
         """Ensures probability value for each detected object is between 0 and 1"""
 
         probabilities = {}
+        amount_of_objects = len(self.game_state.detected_objects)
         probabilities_total = 0
 
-        for detected_objects in self.game_state.detected_objects:
-            # Gets the actual object
-            object_state = self.game_state.object_states[detected_objects]
-            # Adds the label and probability for the object
-            probabilities[detected_objects] = object_state.probability
-            probabilities_total += object_state.probability
+        if self.game_state.questions_asked == 0:
+            # Prevents 'ZeroDivisionError: division by zero' by assigning equal probability to all detected objects
+            for detected_objects in self.game_state.detected_objects:
+                probabilities[detected_objects] = 1 / amount_of_objects
+        else:
+            for detected_objects in self.game_state.detected_objects:
+                # Gets the actual object
+                object_state = self.game_state.object_states[detected_objects]
+                # Adds the label and probability for the object
+                probabilities[detected_objects] = object_state.probability
+                probabilities_total += object_state.probability
 
-        # Normalises the probabilities for each object
-        for probability in probabilities:
-            probabilities[probability] = probabilities[probability] / probabilities_total
+            # Normalises the probabilities for each object
+            for probability in probabilities:
+                probabilities[probability] = probabilities[probability] / probabilities_total
 
         return probabilities
 
