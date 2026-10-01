@@ -1,6 +1,5 @@
 import numpy as np
 from question_selector import QuestionSelector
-from object_probability import ObjectProbability
 
 
 class ModelManager:
@@ -16,16 +15,15 @@ class ModelManager:
             output_weights=output_weights,
             output_bias=output_bias)
 
-    def load_model(self, file_path):
+    def load_model(self, file_path, model):
         """Loads the specified NN"""
 
         with np.load(file_path) as data:
-            input_hidden_weights = data['input_hidden_weights']
-            hidden_biases = data['hidden_biases']
-            output_weights = data['output_weights']
-            output_bias = data['output_bias']
+            model.input_hidden_weights = data['input_hidden_weights']
+            model.hidden_biases = data['hidden_biases']
+            model.output_weights = data['output_weights']
+            model.output_bias = data['output_bias']
 
-        return input_hidden_weights, hidden_biases, output_weights, output_bias
 
 # Testing
 if __name__ == "__main__":
@@ -40,11 +38,10 @@ if __name__ == "__main__":
             question_selector.output_weights,
             question_selector.output_bias)
 
-    input_hidden_weights, hidden_biases, output_weights, output_bias \
-        = model_manager.load_model("../models/test_model_saving.npz")
+    model_manager.load_model("../models/test_model_saving.npz", question_selector)
 
     print("******\nLoad model Test\n******")
-    print(f"input_hidden_weights:\n{input_hidden_weights} "
-          f"hidden_biases:\n{hidden_biases} "
-          f"output_weights:\n{output_weights} "
-          f"output_bias:\n{output_bias}")
+    print(f"input_hidden_weights:\n{question_selector.input_hidden_weights} "
+          f"hidden_biases:\n{question_selector.hidden_biases} "
+          f"output_weights:\n{question_selector.output_weights} "
+          f"output_bias:\n{question_selector.output_bias}")

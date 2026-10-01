@@ -7,6 +7,7 @@ from PIL import Image
 from game_state import GameState
 from question_selector import QuestionSelector
 from question_system import QuestionSystem
+from model_manager import ModelManager
 
 
 def get_random_scene():
@@ -70,6 +71,9 @@ def main():
     vision = Vision()
     nn_object_probability = ObjectProbability()
     nn_question_selector = QuestionSelector()
+    model_manager = ModelManager()
+
+
 
     print("Welcome to the 5 Questions Game\n___________________________")
 

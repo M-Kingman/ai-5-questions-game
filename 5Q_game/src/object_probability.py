@@ -13,6 +13,7 @@ class ObjectProbability:
         self.output_bias = 0.5
         self.learning_rate = 0.1
         self.epochs = 5000
+        self.file_path = "../models/object_probability_model.npz"
 
     def sigmoid(self, weighted_sum):
         return 1 / (1 + np.exp(-weighted_sum))
