@@ -33,8 +33,6 @@ class GameState:
         """Creates an ObjectState object for each OBJECT and sets its state,
         depending on if it was detected"""
 
-        # Params needed: name, properties, property_input_values, indicator, probability
-
         all_object_states = {}
 
         for item in OBJECTS:

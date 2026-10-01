@@ -73,7 +73,8 @@ def main():
     nn_question_selector = QuestionSelector()
     model_manager = ModelManager()
 
-
+    model_manager.load_model(nn_object_probability.file_path, nn_object_probability)
+    model_manager.load_model(nn_question_selector.file_path, nn_question_selector)
 
     print("Welcome to the 5 Questions Game\n___________________________")
 

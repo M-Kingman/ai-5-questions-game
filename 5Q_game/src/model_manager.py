@@ -48,18 +48,18 @@ if __name__ == "__main__":
     #       f"output_bias:\n{question_selector.output_bias}")
 
     # Script to create initial model files
-    model_manager.save_model(
-        question_selector.file_path,
-        question_selector.input_hidden_weights,
-        question_selector.hidden_biases,
-        question_selector.output_weights,
-        question_selector.output_bias
-    )
-
-    model_manager.save_model(
-        object_probability.file_path,
-        object_probability.input_hidden_weights,
-        object_probability.hidden_biases,
-        object_probability.output_weights,
-        object_probability.output_bias
-    )
+    # model_manager.save_model(
+    #     question_selector.file_path,
+    #     question_selector.input_hidden_weights,
+    #     question_selector.hidden_biases,
+    #     question_selector.output_weights,
+    #     question_selector.output_bias
+    # )
+    #
+    # model_manager.save_model(
+    #     object_probability.file_path,
+    #     object_probability.input_hidden_weights,
+    #     object_probability.hidden_biases,
+    #     object_probability.output_weights,
+    #     object_probability.output_bias
+    # )

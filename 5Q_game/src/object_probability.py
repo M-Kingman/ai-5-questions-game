@@ -99,29 +99,38 @@ class ObjectProbability:
 
     def training(self, training_data):
         """Runs through training data to update weights and biases"""
+
+        total_training_rows = sum(len(single_game) for single_game in training_data)
+
+        # Strips the names from the data to ensure the correct format
+        for single_game in training_data:
+            for row in range(len(single_game)):
+                single_game[row] = single_game[row][1:]
+
         # 71 training values (14 property values + 56 answer values + 1 target)
         for epoch in range(self.epochs):
             total_loss = 0
 
-            for training_row in training_data:
-                # For each row, applies: forward pass, loss calculation, back propagation and updates parameters
+            for single_game in training_data:
+                for training_row in single_game:
+                    # For each row, applies: forward pass, loss calculation, back propagation and updates parameters
 
-                # Separates current row from training data into inputs and target
-                training_inputs = training_row[0:70]
-                training_target = training_row[70]
+                    # Separates current row from training data into inputs and target
+                    training_inputs = training_row[0:70]
+                    training_target = training_row[70]
 
-                prediction, cache = self.forward_pass(training_inputs)
+                    prediction, cache = self.forward_pass(training_inputs)
 
-                loss = self.calculate_loss(prediction, training_target)
-                total_loss += loss
+                    loss = self.calculate_loss(prediction, training_target)
+                    total_loss += loss
 
-                backpropagation_data = self.backpropagation(training_inputs, cache, training_target)
+                    backpropagation_data = self.backpropagation(training_inputs, cache, training_target)
 
-                self.update_parameters(backpropagation_data)
+                    self.update_parameters(backpropagation_data)
 
             # To track if loss decreases during training
             if (epoch + 1) % 100 == 0:
-                avg_loss = total_loss / len(training_data)
+                avg_loss = total_loss / total_training_rows
                 print(f"Epoch {epoch + 1}: loss = {avg_loss} ")
 
     def update_model(self, input_hidden_weights, hidden_biases, output_weights, output_bias):

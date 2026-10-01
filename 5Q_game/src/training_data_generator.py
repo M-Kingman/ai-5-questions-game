@@ -2,10 +2,11 @@ from questions import *
 import random
 from objects import OBJECTS
 from questions import *
-
+from object_probability import ObjectProbability
 
 class TrainingDataGenerator:
-    """creates training data for the ObjectProbability NN"""
+    """Creates training data for the ObjectProbability NN.
+    Doesn't use GameState methods because the training data format is different from the actual gameplay format.+"""
 
     def __init__(self, number_of_games):
         self.number_of_games = number_of_games
@@ -27,13 +28,19 @@ class TrainingDataGenerator:
 
         return target_object_key, target_object_properties, random_properties
 
-    def create_NN_inputs(self, target_object_key, target_object_properties, random_properties):
-        """"Converts all OBJECTS + random questions + target into NN inputs """
+    def create_NN_inputs(self, target_object_properties, random_properties):
+        """"Converts all OBJECS + random questions + target into NN inputs """
 
-        # Get all the objects without the properties
-        object_list = list(OBJECTS)
+        # Converts object properties into numerical inputs
+        numerical_object_prop = []
 
-        numerical_object_prop = create_objects_data(object_list)
+        for object_name in OBJECTS:
+            object_properties = []
+
+            for property_name in PROPERTIES:
+                object_properties.append(OBJECTS[object_name][property_name])
+
+            numerical_object_prop.append([object_name] + object_properties)
 
         # Matches the sim answers to the target properties answers
         simulated_answers = QUESTION_LIST.copy()
@@ -46,9 +53,18 @@ class TrainingDataGenerator:
             else:
                 simulated_answers[question] = random.choice(["sometimes", "unsure"])
 
-        sim_answers_numerical = answer_converter(simulated_answers)
+        # Converts simulated answers into numerical inputs
+        sim_answers_numerical =[]
 
-        combined_numerical_data = objects_complete_inputs(numerical_object_prop, sim_answers_numerical)
+        for question in simulated_answers:
+            answer = simulated_answers[question]
+            sim_answers_numerical.extend(ANSWERS[answer])
+
+        # Combines object properties and answers into complete NN inputs
+        combined_numerical_data = []
+
+        for object_properties in numerical_object_prop:
+            combined_numerical_data.append(object_properties + sim_answers_numerical)
 
         return combined_numerical_data
 
@@ -73,10 +89,30 @@ class TrainingDataGenerator:
 
         for game in range(self.number_of_games):
             target_object_key, target_object_properties, random_properties = self.random_selection()
-            combined_numerical_data = self.create_NN_inputs(target_object_key, target_object_properties, random_properties)
+            combined_numerical_data = self.create_NN_inputs(target_object_properties, random_properties)
             completed_data = self.add_training_targets(target_object_key, combined_numerical_data)
 
             complete_data_sim_pack.append(completed_data)
 
         return complete_data_sim_pack
 
+if __name__ == "__main__":
+    # Testing
+    generator = TrainingDataGenerator(100)
+    training_data = generator.generate_training_data()
+
+    object_probability = ObjectProbability()
+    object_probability.epochs = 100
+
+    object_probability.training(training_data)
+
+    # Test a training example
+    training_row = training_data[0][0]
+
+    training_inputs = training_row[0:70]
+    training_target = training_row[70]
+
+    prediction, _ = object_probability.forward_pass(training_inputs)
+
+    print(f"Target: {training_target}")
+    print(f"Prediction: {prediction}")
