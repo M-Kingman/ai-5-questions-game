@@ -30,6 +30,7 @@ class RewardSystem:
         self.entropy_points = 0
         self.final_guess_points = 0
         self.game_state = game_state
+        self.probabilities_before = {}
 
     def elimination_reward(self, objects_start, objects_end):
         N = objects_start
@@ -39,17 +40,31 @@ class RewardSystem:
         round_points = N ** 2 * E * F
         self.elimination_points += round_points
 
+    def detected_objects_probabilities_before(self):
+        probabilities = {}
+        probabilities_total = 0
+
+        for detected_objects in self.game_state.detected_objects:
+            # Gets the actual object
+            object_state = self.game_state.object_states[detected_objects]
+            # Adds the label and probability for the object
+            probabilities[detected_objects] = object_state.probability
+            probabilities_total += object_state.probability
+
+        # Normalises the probabilities for each object
+        for probability in probabilities:
+            probabilities[probability] = probabilities[probability] / probabilities_total
+
+        self.probabilities_before = probabilities
+
+    def detected_objects_probabilities_after(self):
+        pass
+    def entropy_reward(self):
+        pass
+
     def final_guess_reward(self):
 
         if self.game_state.final_guess_is_correct:
             self.final_guess_points = 1
         else:
             self.final_guess_points = -1
-
-
-if __name__ == "__main__":
-
-    # Test
-    # reward_test = RewardSystem()
-    # calculated_reward = reward_test.elimination_reward(4, 2) # Removed return statement
-    # print(f"{calculated_reward}")
