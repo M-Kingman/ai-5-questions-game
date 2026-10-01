@@ -1,3 +1,5 @@
+from scipy.stats import entropy
+
 """
 3 reward systems
 
@@ -42,6 +44,8 @@ class RewardSystem:
         self.elimination_points += round_points
 
     def normalised_probability_values(self):
+        """Ensures probability value for each detected object is between 0 and 1"""
+
         probabilities = {}
         probabilities_total = 0
 
@@ -66,8 +70,28 @@ class RewardSystem:
 
         self.probabilities_after = self.normalised_probability_values()
 
+    def entropy_calculation(self, probabilities):
+        """Takes normalised probability values and returns entropy value"""
+
+        probability_list = []
+
+        for probability in probabilities:
+            probability_list.append(probabilities[probability])
+
+        entropy_output = entropy(probability_list)
+
+        return entropy_output
+
     def entropy_reward(self):
-        pass
+        """Calculates entropy points using the difference in entropy before and after """
+
+        entropy_before = self.entropy_calculation(self.probabilities_before)
+        entropy_after = self.entropy_calculation(self.probabilities_after)
+
+        # Reversed formula to ensure lower entropy means higher reward
+        entropy_reward = entropy_before - entropy_after
+
+        self.entropy_points += entropy_reward
 
     def final_guess_reward(self):
 
