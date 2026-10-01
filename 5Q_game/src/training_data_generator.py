@@ -2,14 +2,13 @@ from questions import *
 import random
 from objects import OBJECTS
 from questions import *
-from main import answer_converter, create_objects_data, objects_complete_inputs
+
 
 class TrainingDataGenerator:
     """creates training data for the ObjectProbability NN"""
 
     def __init__(self, number_of_games):
         self.number_of_games = number_of_games
-
 
     def random_selection(self):
         """Randomly selects 5 questions and a target object"""
@@ -27,7 +26,6 @@ class TrainingDataGenerator:
             random_properties.append(random_properties_key)
 
         return target_object_key, target_object_properties, random_properties
-
 
     def create_NN_inputs(self, target_object_key, target_object_properties, random_properties):
         """"Converts all OBJECTS + random questions + target into NN inputs """
@@ -54,7 +52,6 @@ class TrainingDataGenerator:
 
         return combined_numerical_data
 
-
     def add_training_targets(self, target_object_key, combined_numerical_data):
         """Appends either 1 or 0 to each object"""
 
@@ -68,7 +65,6 @@ class TrainingDataGenerator:
         completed_data = combined_numerical_data
 
         return completed_data
-
 
     def generate_training_data(self):
         """Generates training data based off of number of simulated games"""
@@ -84,6 +80,3 @@ class TrainingDataGenerator:
 
         return complete_data_sim_pack
 
-
-train_test = TrainingDataGenerator(5)
-print(train_test.generate_training_data())

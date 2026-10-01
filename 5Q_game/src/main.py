@@ -81,7 +81,6 @@ def main():
         if menu_choice == "1":
             play_game(vision, nn_object_probability, nn_question_selector)
             menu_choice = 0
-            print("1. Press anything to play again\n2.Exit")
 
         elif menu_choice == "2":
             menu_choice = 0
