@@ -31,6 +31,7 @@ class RewardSystem:
         self.final_guess_points = 0
         self.game_state = game_state
         self.probabilities_before = {}
+        self.probabilities_after = {}
 
     def elimination_reward(self, objects_start, objects_end):
         N = objects_start
@@ -40,7 +41,7 @@ class RewardSystem:
         round_points = N ** 2 * E * F
         self.elimination_points += round_points
 
-    def detected_objects_probabilities_before(self):
+    def normalised_probability_values(self):
         probabilities = {}
         probabilities_total = 0
 
@@ -55,10 +56,16 @@ class RewardSystem:
         for probability in probabilities:
             probabilities[probability] = probabilities[probability] / probabilities_total
 
-        self.probabilities_before = probabilities
+        return probabilities
+
+    def detected_objects_probabilities_before(self):
+
+        self.probabilities_before = self.normalised_probability_values()
 
     def detected_objects_probabilities_after(self):
-        pass
+
+        self.probabilities_after = self.normalised_probability_values()
+
     def entropy_reward(self):
         pass
 
