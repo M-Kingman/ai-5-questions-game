@@ -26,6 +26,7 @@ class QuestionSelector:
         self.output_bias = rng.uniform(low=-0.5, high=0.5, size=14)
         self.learning_rate = 0.1
         self.epochs = 5000
+        self.file_path = "../models/question_selector_model.npz"
 
     def forward_pass(self, inputs):
         # Layer 1 - Hidden layer
