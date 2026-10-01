@@ -1,5 +1,5 @@
 from ultralytics import YOLO
-
+from objects import OBJECTS
 
 class Vision:
     def __init__(self):
@@ -13,7 +13,8 @@ class Vision:
         for detected_object in results.boxes:
             class_id = int(detected_object.cls[0])
             object_name = self.model.names[class_id]
-            objects.append(object_name)
+            if object_name in OBJECTS:
+                objects.append(object_name)
 
         # Gets rid of duplicates
         objects = list(set(objects))

@@ -43,6 +43,9 @@ class RewardSystem:
         round_points = N ** 2 * E * F
         self.elimination_points += round_points
 
+        # Test
+        print(f"elimination_points: {self.elimination_points}")
+
     def normalised_probability_values(self):
         """Ensures probability value for each detected object is between 0 and 1"""
 
@@ -93,9 +96,17 @@ class RewardSystem:
 
         self.entropy_points += entropy_reward
 
+        # Test
+        print(f"entropy_before: {entropy_before}")
+        print(f"entropy_after {entropy_after}")
+        print(f"entropy_points: {self.entropy_points}")
+
     def final_guess_reward(self):
 
         if self.game_state.final_guess_is_correct:
             self.final_guess_points = 1
         else:
             self.final_guess_points = -1
+
+        # Test
+        print(f"Final points: {self.final_guess_points}")

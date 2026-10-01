@@ -57,9 +57,13 @@ def play_game(vision, nn_object_probability, nn_question_selector):
     question_system = QuestionSystem(game_state,  nn_object_probability, nn_question_selector)
     reward_system = RewardSystem(game_state)
 
+    # Loop for each round
     while game_state.game_over is not True:
+        reward_system.detected_objects_probabilities_before()
         question_system.ask_question()
         question_system.update_probabilities()
+        reward_system.detected_objects_probabilities_after()
+        reward_system.entropy_reward()
         question_system.update_progress()
 
     system_object_guess = question_system.get_best_answer()
