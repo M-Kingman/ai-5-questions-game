@@ -26,7 +26,21 @@ class RewardSystem:
     Uses a simple reinforcement learning approach based on game feedback."""
 
     def __init__(self,):
-        self.elmination_points = 0
+        self.elimination_points = 0
         self.entropy_points = 0
         self.final_guess_points = 0
-        
+
+    def elimination_reward(self, objects_start, objects_end):
+        N = objects_start
+        E = (objects_start - objects_end) / objects_start
+        F = 0.01
+
+        round_points = N ** 2 * E * F
+        self.elimination_points += round_points
+
+if __name__ == "__main__":
+
+    # Test
+    reward_test = RewardSystem()
+    calculated_reward = reward_test.elimination_reward(4, 2) # Removed return statement
+    print(f"{calculated_reward}")
