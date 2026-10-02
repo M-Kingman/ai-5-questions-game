@@ -9,6 +9,7 @@ from question_selector import QuestionSelector
 from question_system import QuestionSystem
 from model_manager import ModelManager
 from reward_system import RewardSystem
+from training_data_generator import TrainingDataGenerator
 
 def get_random_scene():
     """Picks a random image from the scenes folder"""
@@ -55,7 +56,7 @@ def play_game(vision, nn_object_probability, nn_question_selector):
     detected_objects = vision.detect_objects(str(scene_path))
     game_state = GameState(detected_objects)
     question_system = QuestionSystem(game_state,  nn_object_probability, nn_question_selector)
-    reward_system = RewardSystem(game_state)
+    reward_system = RewardSystem(game_state, detected_objects)
 
     # Loop for each round
     while game_state.game_over is not True:
@@ -64,14 +65,12 @@ def play_game(vision, nn_object_probability, nn_question_selector):
         question_system.update_probabilities()
         reward_system.detected_objects_probabilities_after()
         reward_system.entropy_reward()
+        reward_system.elimination_reward()
         question_system.update_progress()
 
     system_object_guess = question_system.get_best_answer()
     game_state.player_reveal(system_object_guess)
     reward_system.final_guess_reward()
-
-
-
 
 
 def main():
@@ -108,8 +107,27 @@ def main():
                     menu_choice = input()
                 elif menu_choice == "2":
                     menu_choice = 0
-                    print("Object Probability Neural Network\n1. Train\n2. Generate Data")
-                    menu_choice = input()
+
+                    # Generates training data > trains model > saves data to csv
+                    generator = TrainingDataGenerator(1000)
+                    training_data = generator.generate_training_data()
+                    nn_object_probability.training(training_data)
+                    generator.save_data_csv(training_data, "../data/training_data_inspection.csv")
+
+                    print("Would you like to save the updated model? Y/N")
+                    menu_choice = input().lower()
+
+                    if menu_choice == "y":
+                        model_manager.save_model(
+                            nn_object_probability.file_path,
+                            nn_object_probability.input_hidden_weights,
+                            nn_object_probability.hidden_biases,
+                            nn_object_probability.output_weights,
+                            nn_object_probability.output_bias,
+                        )
+                        print("Model saved")
+
+
                 else:
                     print("please make a valid selection")
 

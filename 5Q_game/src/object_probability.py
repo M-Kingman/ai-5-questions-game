@@ -12,7 +12,7 @@ class ObjectProbability:
         self.output_weights = rng.uniform(low=-0.5, high=0.5, size=20)
         self.output_bias = 0.5
         self.learning_rate = 0.1
-        self.epochs = 5000
+        self.epochs = 100
         self.file_path = "../models/object_probability_model.npz"
 
     def sigmoid(self, weighted_sum):

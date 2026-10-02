@@ -27,15 +27,32 @@ class RewardSystem:
     """Calculates question rewards and final game rewards for the QuestionSelector.
     Uses a simple reinforcement learning approach based on game feedback."""
 
-    def __init__(self, game_state):
+    def __init__(self, game_state, detected_objects):
         self.elimination_points = 0
         self.entropy_points = 0
         self.final_guess_points = 0
         self.game_state = game_state
         self.probabilities_before = {}
         self.probabilities_after = {}
+        self.previous_amount_of_possible_objects = len(detected_objects)
 
-    def elimination_reward(self, objects_start, objects_end):
+    def elimination_reward(self):
+
+        objects_start = self.previous_amount_of_possible_objects
+
+        # Test
+        print(f"Objects start {objects_start}")
+
+        amount_of_eliminated_objects = 0
+
+        # Considers the object eliminated if probability is < 0.15
+        for detected_objects in self.game_state.detected_objects:
+            object_state = self.game_state.object_states[detected_objects]
+            if object_state.probability < 0.15:
+                amount_of_eliminated_objects += 1
+
+        objects_end = objects_start - amount_of_eliminated_objects
+
         N = objects_start
         E = (objects_start - objects_end) / objects_start
         F = 0.01
@@ -43,7 +60,11 @@ class RewardSystem:
         round_points = N ** 2 * E * F
         self.elimination_points += round_points
 
+        self.previous_amount_of_possible_objects = objects_end
+
         # Test
+        print(f"Objects end {objects_end}")
+        print(f"Objects count for next round {self.previous_amount_of_possible_objects}")
         print(f"elimination_points: {self.elimination_points}")
 
     def normalised_probability_values(self):

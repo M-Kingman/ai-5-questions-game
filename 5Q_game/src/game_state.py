@@ -31,6 +31,8 @@ class GameState:
 
         self.final_guess_is_correct = None
 
+        self.amount_of_possible_objects = len(detected_objects)
+
     def create_object_states(self):
         """Creates an ObjectState object for each OBJECT and sets its state,
         depending on if it was detected"""

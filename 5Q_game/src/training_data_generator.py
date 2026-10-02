@@ -1,7 +1,7 @@
-from questions import *
-import random
+import csv
 from objects import OBJECTS
 from questions import *
+import random
 from object_probability import ObjectProbability
 
 class TrainingDataGenerator:
@@ -96,23 +96,66 @@ class TrainingDataGenerator:
 
         return complete_data_sim_pack
 
-if __name__ == "__main__":
-    # Testing
-    generator = TrainingDataGenerator(100)
-    training_data = generator.generate_training_data()
+    def save_data_csv(self, training_data, file_path):
+        """Saves training data in human-readable csv format"""
 
-    object_probability = ObjectProbability()
-    object_probability.epochs = 100
+        # Row Layout= name + 14 properties + 56 answer values + target
+        with open(file_path, "w", newline="") as csv_file:
+            writer = csv.writer(csv_file)
 
-    object_probability.training(training_data)
+            # Header: game, object, 14 properties, 14 answer, target
+            header = ["game", "object"]
 
-    # Test a training example
-    training_row = training_data[0][0]
+            for property_name in PROPERTIES:
+                header.append(f"prop_{property_name}")
 
-    training_inputs = training_row[0:70]
-    training_target = training_row[70]
+            for property_name in PROPERTIES:
+                header.append(f"answer_{property_name}")
 
-    prediction, _ = object_probability.forward_pass(training_inputs)
+            header.append("target")
 
-    print(f"Target: {training_target}")
-    print(f"Prediction: {prediction}")
+            writer.writerow(header)
+
+            # Adds each training game to the csv file
+            for game_number, game_data in enumerate(training_data, start=1):
+                for row in game_data:
+                    name = row[0]
+                    properties = row[1:15]
+                    answer_values = row[15:71]
+                    target = row[71]
+
+                    #converts raw outputs back into words
+                    answers = []
+
+                    for index in range(len(PROPERTIES)):
+                        encoded = answer_values[index * 4:(index + 1) * 4]
+
+                        for answer_name, encoding in ANSWERS.items():
+                            if encoded == encoding:
+                                answers.append(answer_name)
+
+                    writer.writerow([game_number, name] + properties + answers + [target])
+
+        print(f"saved {len(training_data)} games to {file_path}")
+
+
+# if __name__ == "__main__":
+#     # Testing
+#     generator = TrainingDataGenerator(100)
+#     training_data = generator.generate_training_data()
+#
+#     object_probability = ObjectProbability()
+#     object_probability.epochs = 100
+#
+#     object_probability.training(training_data)
+#
+#     # Test a training example
+#     training_row = training_data[0][0]
+#
+#     training_inputs = training_row[0:70]
+#     training_target = training_row[70]
+#
+#     prediction, _ = object_probability.forward_pass(training_inputs)
+#
+#     print(f"Target: {training_target}")
+#     print(f"Prediction: {prediction}")
