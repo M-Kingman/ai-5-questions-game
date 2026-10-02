@@ -108,14 +108,30 @@ def main():
                 elif menu_choice == "2":
                     menu_choice = 0
 
-                    # Generates training data > trains model > saves data to csv
                     generator = TrainingDataGenerator(1000)
+                    print("Generating training and evaluation data...")
                     training_data = generator.generate_training_data()
+                    evaluation_data = generator.generate_training_data()
+
+                    pretraining_eval = generator.evaluate_model(nn_object_probability, evaluation_data)
+
+                    print("Training model...")
                     nn_object_probability.training(training_data)
+                    print("Saving training data to csv...")
                     generator.save_data_csv(training_data, "../data/training_data_inspection.csv")
+
+                    print("Evaluating model...")
+                    post_training_eval = generator.evaluate_model(nn_object_probability, evaluation_data)
+
+                    print(f"Before training: {pretraining_eval:.2f}%")
+                    print(f"After training: {post_training_eval:.2f}%")
 
                     print("Would you like to save the updated model? Y/N")
                     menu_choice = input().lower()
+
+                    print("Evaluating updated model...")
+
+
 
                     if menu_choice == "y":
                         model_manager.save_model(
@@ -126,7 +142,6 @@ def main():
                             nn_object_probability.output_bias,
                         )
                         print("Model saved")
-
 
                 else:
                     print("please make a valid selection")

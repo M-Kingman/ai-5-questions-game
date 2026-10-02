@@ -102,11 +102,6 @@ class ObjectProbability:
 
         total_training_rows = sum(len(single_game) for single_game in training_data)
 
-        # Strips the names from the data to ensure the correct format
-        for single_game in training_data:
-            for row in range(len(single_game)):
-                single_game[row] = single_game[row][1:]
-
         # 71 training values (14 property values + 56 answer values + 1 target)
         for epoch in range(self.epochs):
             total_loss = 0
@@ -116,8 +111,8 @@ class ObjectProbability:
                     # For each row, applies: forward pass, loss calculation, back propagation and updates parameters
 
                     # Separates current row from training data into inputs and target
-                    training_inputs = training_row[0:70]
-                    training_target = training_row[70]
+                    training_inputs = training_row[1:71]
+                    training_target = training_row[71]
 
                     prediction, cache = self.forward_pass(training_inputs)
 

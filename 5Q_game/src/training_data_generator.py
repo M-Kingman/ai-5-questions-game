@@ -138,6 +138,39 @@ class TrainingDataGenerator:
 
         print(f"saved {len(training_data)} games to {file_path}")
 
+    def evaluate_model(self, nn_object_probability, evaluation_data):
+        """Evaluates the model using new data"""
+
+        correct_predictions = 0
+
+        for single_game in evaluation_data:
+            target_object = None
+            highest_probability = -1 # Used -1 because an object may have a prediction of 0
+            predicted_object = None
+
+            for row in single_game:
+                object_name = row[0]
+                inputs = row [1:71]
+                target = row[71]
+
+                # Get the target object
+                if target == 1:
+                    target_object = object_name
+
+                # Get the model's prediction
+                prediction, _ = nn_object_probability.forward_pass(inputs)
+
+                if prediction > highest_probability:
+                    highest_probability = prediction
+                    predicted_object = object_name
+
+            if predicted_object == target_object:
+                correct_predictions += 1
+
+        accuracy = (correct_predictions / len(evaluation_data)) * 100
+        print("DEBUG accuracy:", accuracy)
+        return accuracy
+
 
 # if __name__ == "__main__":
 #     # Testing
