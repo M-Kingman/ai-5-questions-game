@@ -168,7 +168,6 @@ class TrainingDataGenerator:
                 correct_predictions += 1
 
         accuracy = (correct_predictions / len(evaluation_data)) * 100
-        print("DEBUG accuracy:", accuracy)
         return accuracy
 
 

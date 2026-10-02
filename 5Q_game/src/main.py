@@ -11,6 +11,7 @@ from model_manager import ModelManager
 from reward_system import RewardSystem
 from training_data_generator import TrainingDataGenerator
 
+
 def get_random_scene():
     """Picks a random image from the scenes folder"""
 
@@ -108,7 +109,7 @@ def main():
                 elif menu_choice == "2":
                     menu_choice = 0
 
-                    generator = TrainingDataGenerator(1000)
+                    generator = TrainingDataGenerator(5000)
                     print("Generating training and evaluation data...")
                     training_data = generator.generate_training_data()
                     evaluation_data = generator.generate_training_data()
@@ -130,8 +131,6 @@ def main():
                     menu_choice = input().lower()
 
                     print("Evaluating updated model...")
-
-
 
                     if menu_choice == "y":
                         model_manager.save_model(

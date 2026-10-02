@@ -34,38 +34,6 @@ class RewardSystem:
         self.game_state = game_state
         self.probabilities_before = {}
         self.probabilities_after = {}
-        self.previous_amount_of_possible_objects = len(detected_objects)
-
-    def elimination_reward(self):
-
-        objects_start = self.previous_amount_of_possible_objects
-
-        # Test
-        print(f"Objects start {objects_start}")
-
-        amount_of_eliminated_objects = 0
-
-        # Considers the object eliminated if probability is < 0.15
-        for detected_objects in self.game_state.detected_objects:
-            object_state = self.game_state.object_states[detected_objects]
-            if object_state.probability < 0.15:
-                amount_of_eliminated_objects += 1
-
-        objects_end = objects_start - amount_of_eliminated_objects
-
-        N = objects_start
-        E = (objects_start - objects_end) / objects_start
-        F = 0.01
-
-        round_points = N ** 2 * E * F
-        self.elimination_points += round_points
-
-        self.previous_amount_of_possible_objects = objects_end
-
-        # Test
-        print(f"Objects end {objects_end}")
-        print(f"Objects count for next round {self.previous_amount_of_possible_objects}")
-        print(f"elimination_points: {self.elimination_points}")
 
     def normalised_probability_values(self):
         """Ensures probability value for each detected object is between 0 and 1"""
@@ -91,6 +59,36 @@ class RewardSystem:
                 probabilities[probability] = probabilities[probability] / probabilities_total
 
         return probabilities
+
+    def elimination_reward(self):
+
+        objects_start = len(self.game_state.possible_objects)
+        probabilities = self.normalised_probability_values()
+
+        if objects_start == 0:
+            return
+
+        amount_of_eliminated_objects = 0
+
+        items_to_remove = []
+
+        # Considers the object eliminated if probability is < 0.15
+        for possible in self.game_state.possible_objects:
+            if probabilities[possible] < 0.15: # Uses the normalised probability instead of the raw data
+                amount_of_eliminated_objects += 1
+                items_to_remove.append(possible)
+
+        for remove_item in items_to_remove:
+            self.game_state.possible_objects.remove(remove_item)
+
+        objects_end = len(self.game_state.possible_objects)
+
+        N = objects_start
+        E = (objects_start - objects_end) / objects_start
+        F = 0.01
+
+        round_points = N ** 2 * E * F
+        self.elimination_points += round_points
 
     def detected_objects_probabilities_before(self):
 

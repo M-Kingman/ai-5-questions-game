@@ -2,7 +2,7 @@ class ObjectState:
     """Keeps track of each objects state"""
     # Creates an object for each object in OBJECTS
 
-    def __init__(self, name, properties, property_input_values, indicator, probability):
+    def __init__(self, name, properties, property_input_values, indicator, probability, possible):
 
         self.name = name
 
@@ -16,6 +16,9 @@ class ObjectState:
 
         # Changes throughout game
         self.probability = probability
+
+        # Used by elimination_rewards method to keep track of possible existing choices
+        self.possible = possible
 
     def get_object_state_inputs(self):
         """Returns the objects numerical state inputs"""
