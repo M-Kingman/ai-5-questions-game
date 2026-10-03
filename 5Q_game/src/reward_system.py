@@ -27,13 +27,51 @@ class RewardSystem:
     """Calculates question rewards and final game rewards for the QuestionSelector.
     Uses a simple reinforcement learning approach based on game feedback."""
 
-    def __init__(self, game_state, detected_objects):
+    def __init__(self, game_state):
         self.elimination_points = 0
         self.entropy_points = 0
         self.final_guess_points = 0
         self.game_state = game_state
         self.probabilities_before = {}
         self.probabilities_after = {}
+        self.round_data = {
+            1: {
+                "inputs": None,                 # From get_question_scores()
+                "outputs": None,                # From get_question_scores()
+                "elimination_reward": None,     # From elimination_reward()
+                "entropy_reward": None,         # From entropy_reward()
+                "round_reward": None            # From
+            },
+            2: {
+                "inputs": None,
+                "outputs": None,
+                "elimination_reward": None,
+                "entropy_reward": None,
+                "round_reward": None
+            },
+            3: {
+                "inputs": None,
+                "outputs": None,
+                "elimination_reward": None,
+                "entropy_reward": None,
+                "round_reward": None
+            },
+            4: {
+                "inputs": None,
+                "outputs": None,
+                "elimination_reward": None,
+                "entropy_reward": None,
+                "round_reward": None
+            },
+            5: {
+                "inputs": None,
+                "outputs": None,
+                "elimination_reward": None,
+                "entropy_reward": None,
+                "round_reward": None
+            }
+        }
+        self.round_reward = {}
 
     def normalised_probability_values(self):
         """Ensures probability value for each detected object is between 0 and 1"""
@@ -90,6 +128,8 @@ class RewardSystem:
         round_points = N ** 2 * E * F
         self.elimination_points += round_points
 
+        self.round_data[self.game_state.questions_asked]["elimination_reward"] = round_points
+
     def detected_objects_probabilities_before(self):
 
         self.probabilities_before = self.normalised_probability_values()
@@ -121,6 +161,8 @@ class RewardSystem:
 
         self.entropy_points += entropy_reward
 
+        self.round_data[self.game_state.questions_asked]["entropy_reward"] = entropy_reward
+
         # Test
         print(f"entropy_before: {entropy_before}")
         print(f"entropy_after {entropy_after}")
@@ -133,5 +175,6 @@ class RewardSystem:
         else:
             self.final_guess_points = -1
 
-        # Test
-        print(f"Final points: {self.final_guess_points}")
+    def store_round_inputs(self, round_inputs):
+        self.round_data.app
+

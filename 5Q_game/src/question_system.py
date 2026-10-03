@@ -5,12 +5,13 @@ class QuestionSystem:
     """Manages questioning process by providing inputs to question_selector, selecting questions,
     processing answers and updating game state."""
 
-    def __init__(self, game_state, object_probability, question_selector):
+    def __init__(self, game_state, reward_system, object_probability, question_selector):
 
         self.max_questions = 5
         self.game_state = game_state
         self.object_probability = object_probability
         self.question_selector = question_selector
+        self.reward_system = reward_system
 
     def prepare_input(self):
         """Prepares all the needed inputs for the QuestionSelector NN."""
@@ -26,7 +27,13 @@ class QuestionSystem:
     def get_question_scores(self):
         """Passes prepare_input data into QuestionSelector NN and returns scores"""
 
-        question_scores, cache = self.question_selector.forward_pass(self.prepare_input())
+        inputs = self.prepare_input()
+        question_scores, cache = self.question_selector.forward_pass(inputs)
+
+        # Provides inputs/outputs to RewardSystem, round_data dictionary
+        self.reward_system.round_data[self.game_state.questions_asked]["inputs"] = inputs
+        self.reward_system.round_data[self.game_state.questions_asked]["outputs"] = question_scores
+
         return question_scores
 
     def select_question(self):

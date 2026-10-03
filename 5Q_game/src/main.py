@@ -56,8 +56,9 @@ def play_game(vision, nn_object_probability, nn_question_selector):
 
     detected_objects = vision.detect_objects(str(scene_path))
     game_state = GameState(detected_objects)
-    question_system = QuestionSystem(game_state,  nn_object_probability, nn_question_selector)
-    reward_system = RewardSystem(game_state, detected_objects)
+    reward_system = RewardSystem(game_state)
+    question_system = QuestionSystem(game_state, reward_system, nn_object_probability, nn_question_selector)
+
 
     # Loop for each round
     while game_state.game_over is not True:
