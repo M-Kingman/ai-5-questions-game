@@ -27,20 +27,21 @@ class RewardSystem:
     """Calculates question rewards and final game rewards for the QuestionSelector.
     Uses a simple reinforcement learning approach based on game feedback."""
 
-    def __init__(self, game_state):
+    def __init__(self, game_state, question_selector):
         self.elimination_points = 0
         self.entropy_points = 0
         self.final_guess_points = 0
         self.game_state = game_state
+        self.question_selector = question_selector
         self.probabilities_before = {}
         self.probabilities_after = {}
         self.round_data = {
             1: {
-                "inputs": None,                 # From get_question_scores()
-                "outputs": None,                # From get_question_scores()
-                "elimination_reward": None,     # From elimination_reward()
-                "entropy_reward": None,         # From entropy_reward()
-                "final_round_assigned_points": None            # From
+                "inputs": None,                         # From get_question_scores()
+                "outputs": None,                        # From get_question_scores()
+                "elimination_reward": None,             # From elimination_reward()
+                "entropy_reward": None,                 # From entropy_reward()
+                "final_round_assigned_points": None     # From assign_round_rewards()
             },
             2: {
                 "inputs": None,
@@ -252,3 +253,16 @@ class RewardSystem:
             self.round_data[each_round]["final_round_assigned_points"] = final_round_assigned_points
 
     def train_question_selector(self):
+        """Once the game is done, trains the NN on each round separately."""
+        "Reason for doing it this way, is that the system needs to know wehther the final answwer was right or wrong " \
+        "in order to properly assign the right amount of points"
+
+        for each_round in self.round_data:
+            round_training_inputs = []
+            inputs = self.round_data[each_round]["inputs"]
+            outputs = self.round_data[each_round]["outputs"]
+            round_total_reward = self.round_data[each_round]["final_round_assigned_points"]
+
+            round_training_inputs = inputs + outputs + [round_total_reward]
+
+            self.question_selector.training(round_training_inputs)
