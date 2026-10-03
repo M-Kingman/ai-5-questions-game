@@ -175,6 +175,6 @@ class RewardSystem:
         else:
             self.final_guess_points = -1
 
-    def store_round_inputs(self, round_inputs):
-        self.round_data.app
+    def assign_round_rewards(self):
 
+    def train_question_selector(self):
