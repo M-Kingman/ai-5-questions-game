@@ -40,35 +40,35 @@ class RewardSystem:
                 "outputs": None,                # From get_question_scores()
                 "elimination_reward": None,     # From elimination_reward()
                 "entropy_reward": None,         # From entropy_reward()
-                "round_reward": None            # From
+                "final_round_assigned_points": None            # From
             },
             2: {
                 "inputs": None,
                 "outputs": None,
                 "elimination_reward": None,
                 "entropy_reward": None,
-                "round_reward": None
+                "final_round_assigned_points": None
             },
             3: {
                 "inputs": None,
                 "outputs": None,
                 "elimination_reward": None,
                 "entropy_reward": None,
-                "round_reward": None
+                "final_round_assigned_points": None
             },
             4: {
                 "inputs": None,
                 "outputs": None,
                 "elimination_reward": None,
                 "entropy_reward": None,
-                "round_reward": None
+                "final_round_assigned_points": None
             },
             5: {
                 "inputs": None,
                 "outputs": None,
                 "elimination_reward": None,
                 "entropy_reward": None,
-                "round_reward": None
+                "final_round_assigned_points": None
             }
         }
         self.round_reward = {}
@@ -176,5 +176,79 @@ class RewardSystem:
             self.final_guess_points = -1
 
     def assign_round_rewards(self):
+        """Calculates how the combined points for each round will be adjusted.
+        Positive rounds contribution % is based on how much each round contributed to the overall positive points.
+        Negative rounds get a flat 5 %.
+        Decided on this method, so NN will learn faster when correct, but slower when wrong."""
+
+        all_rounds_positive_points = 0
+
+        percentage_left = 100
+
+        round_percentage_contribution = {
+            1: {
+                "elimination_entropy_combined": None,
+                "negative": False,
+                "assigned_percentage": None,
+            },
+            2: {
+                "elimination_entropy_combined": None,
+                "negative": False,
+                "assigned_percentage": None,
+            },
+            3: {
+                "elimination_entropy_combined": None,
+                "negative": False,
+                "assigned_percentage": None,
+            },
+            4: {
+                "elimination_entropy_combined": None,
+                "negative": False,
+                "assigned_percentage": None,
+            },
+            5: {
+                "elimination_entropy_combined": None,
+                "negative": False,
+                "assigned_percentage": None,
+            },
+        }
+
+        # Broke for loops up for easier readability
+
+        # Calculates combined points and is_negative for each round
+        for each_round in round_percentage_contribution:
+            elimination_reward = self.round_data[each_round]["elimination_reward"]
+            entropy_reward = self.round_data[each_round]["entropy_reward"]
+            round_total = elimination_reward + entropy_reward
+            is_negative = False
+
+            if round_total <= 0:
+                is_negative = True
+
+            round_percentage_contribution[each_round]["elimination_entropy_combined"] = round_total
+            round_percentage_contribution[each_round]["negative"] = is_negative
+
+        # Assigns 10% if round was neg; or adds points to total if pos
+        for each_round in round_percentage_contribution:
+            if round_percentage_contribution[each_round]["negative"]:
+                round_percentage_contribution[each_round]["assigned_percentage"] = 5
+                percentage_left -= 5
+            else:
+                all_rounds_positive_points += round_percentage_contribution[each_round]["elimination_entropy_combined"]
+
+        # Calculates the percentage contribution for positive rounds from combined positive points
+        for each_round in round_percentage_contribution:
+            combined_rewards = round_percentage_contribution[each_round]["elimination_entropy_combined"]
+
+            if not round_percentage_contribution[each_round]["negative"]:
+                round_percentage_contribution[each_round]["assigned_percentage"] = \
+                    (combined_rewards / all_rounds_positive_points) * percentage_left
+
+        # Assigns the final decided contribution points for each round
+        for each_round in round_percentage_contribution:
+            combined_points = round_percentage_contribution[each_round]["elimination_entropy_combined"]
+            assigned_percentage = round_percentage_contribution[each_round]["assigned_percentage"]
+            final_round_assigned_points = combined_points * (1 + assigned_percentage / 100)
+            self.round_data[each_round]["final_round_assigned_points"] = final_round_assigned_points
 
     def train_question_selector(self):
