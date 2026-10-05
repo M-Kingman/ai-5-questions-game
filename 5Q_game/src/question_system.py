@@ -31,8 +31,8 @@ class QuestionSystem:
         question_scores, cache = self.question_selector.forward_pass(inputs)
 
         # Provides inputs/outputs to RewardSystem, round_data dictionary
-        self.reward_system.round_data[self.game_state.questions_asked]["inputs"] = inputs
-        self.reward_system.round_data[self.game_state.questions_asked]["outputs"] = question_scores
+        self.reward_system.round_data[self.game_state.questions_asked + 1]["inputs"] = inputs
+        self.reward_system.round_data[self.game_state.questions_asked + 1]["outputs"] = question_scores
 
         return question_scores
 
@@ -56,6 +56,10 @@ class QuestionSystem:
 
         # Gets the key for the question with the highest score
         question_to_ask = max(ranked_questions, key=ranked_questions.get)
+
+        # Provides selected_action to RewardSystem, round_data dictionary
+        self.reward_system.round_data[self.game_state.questions_asked + 1]["selected_action"] \
+            = list(QUESTIONS).index(question_to_ask)
 
         return question_to_ask
 

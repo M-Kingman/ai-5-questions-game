@@ -16,21 +16,21 @@ PROPERTIES = [
     "pet",
     "healthy"]
 
-QUESTIONS = {
-    "animal": "Is it an animal?",
-    "food": "Is it food?",
-    "furniture": "Is it a piece of furniture?",
-    "appliance": "Is it an appliance?",
-    "vehicle": "Is it a vehicle?",
-    "tool": "Is it a tool?",
-    "electronic": "Is it electronic?",
-    "holdable": "Can you hold it in your hand?",
-    "indoor": "Would you normally find it indoors?",
-    "engine": "Does it have an engine?",
-    "used_for_work": "Is it used for work?",
-    "four_wheels": "Does it have 4 wheels?",
-    "pet": "Is it a pet?",
-    "healthy": "Is it healthy?"
+QUESTIONS = {                                           # Index
+    "animal": "Is it an animal?",                       # 0
+    "food": "Is it food?",                              # 1
+    "furniture": "Is it a piece of furniture?",         # 2
+    "appliance": "Is it an appliance?",                 # 3
+    "vehicle": "Is it a vehicle?",                      # 4
+    "tool": "Is it a tool?",                            # 5
+    "electronic": "Is it electronic?",                  # 6
+    "holdable": "Can you hold it in your hand?",        # 7
+    "indoor": "Would you normally find it indoors?",    # 8
+    "engine": "Does it have an engine?",                # 9
+    "used_for_work": "Is it used for work?",            # 10
+    "four_wheels": "Does it have 4 wheels?",            # 11
+    "pet": "Is it a pet?",                              # 12
+    "healthy": "Is it healthy?"                         # 13
 }
 
 ANSWERS = {

@@ -1,25 +1,35 @@
 from scipy.stats import entropy
 
 """
-3 reward systems
+Reward system for the QuestionSelector neural network.
 
-    1. Elimination reward = N^2*E*F
+The QuestionSelector is trained using a customised, basic policy-gradient reinforcement learning approach.
 
-    where:
-        N - the total amount initially at the begining of the round
-        E - is the eliminated ratio percentage in decimal form
-        F - Factor to scale down the final number
+Three reward components:
 
-    2. Based on the difference in shannon entropy before and after the round
+    1. Elimination reward = N^2 * E * F
 
-    3. Final reward is based on whether the final guess was right:
-        +1 if correct
-        -1 if wrong
+       where:
+           N - total number of possible objects at the beginning of the round
+           E - proportion of objects eliminated during the round
+           F - scaling factor
 
-    Notes:
-        1 and 2 are rewarded after each round and accumulate
-        3 is rewarded only at the end of the 5th round
-        All points are then added up and passed to the questions selector nn for training
+    2. Entropy reward
+
+       Based on the change in Shannon entropy before and after each round.
+       A reduction in entropy represents a reduction in uncertainty.
+
+    3. Final-guess reward
+
+        Influenced by how much each round contributed to the overall decision, and whether it was correct or not. 
+        It increases the influence of rounds that contributed to successful outcomes while reducing the influence 
+        of rounds that performed poorly, guiding the adjustments made to the QuestionSelector's weights 
+        and biases during training.   
+           
+Reward timing:
+
+    - Elimination and entropy rewards are calculated after each round and saved.
+    - Final-guess reward distribution is calculated after the 5th round 
 """
 
 
@@ -39,6 +49,7 @@ class RewardSystem:
             1: {
                 "inputs": None,                         # From get_question_scores()
                 "outputs": None,                        # From get_question_scores()
+                "selected_action": None,                # From select_question()
                 "elimination_reward": None,             # From elimination_reward()
                 "entropy_reward": None,                 # From entropy_reward()
                 "final_round_assigned_points": None     # From assign_round_rewards()
@@ -46,6 +57,7 @@ class RewardSystem:
             2: {
                 "inputs": None,
                 "outputs": None,
+                "selected_action": None,
                 "elimination_reward": None,
                 "entropy_reward": None,
                 "final_round_assigned_points": None
@@ -53,6 +65,7 @@ class RewardSystem:
             3: {
                 "inputs": None,
                 "outputs": None,
+                "selected_action": None,
                 "elimination_reward": None,
                 "entropy_reward": None,
                 "final_round_assigned_points": None
@@ -60,6 +73,7 @@ class RewardSystem:
             4: {
                 "inputs": None,
                 "outputs": None,
+                "selected_action": None,
                 "elimination_reward": None,
                 "entropy_reward": None,
                 "final_round_assigned_points": None
@@ -67,6 +81,7 @@ class RewardSystem:
             5: {
                 "inputs": None,
                 "outputs": None,
+                "selected_action": None,
                 "elimination_reward": None,
                 "entropy_reward": None,
                 "final_round_assigned_points": None
