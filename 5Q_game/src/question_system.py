@@ -1,4 +1,9 @@
 from questions import QUESTIONS, ANSWERS
+import numpy as np
+
+def softmax(values):
+    exp_values = np.exp(values - np.max(values))
+    return exp_values / np.sum(exp_values)
 
 
 class QuestionSystem:
@@ -24,42 +29,51 @@ class QuestionSystem:
 
         return question_selector_input_data
 
-    def get_question_scores(self):
-        """Passes prepare_input data into QuestionSelector NN and returns scores"""
+    def get_question_logits(self):
+        """Passes prepare_input data into QuestionSelector NN and returns raw logits"""
 
         inputs = self.prepare_input()
-        question_scores, cache = self.question_selector.forward_pass(inputs)
+        question_logits, cache = self.question_selector.forward_pass(inputs)
 
         # Provides inputs/outputs to RewardSystem, round_data dictionary
         self.reward_system.round_data[self.game_state.questions_asked + 1]["inputs"] = inputs
-        self.reward_system.round_data[self.game_state.questions_asked + 1]["outputs"] = question_scores
 
-        return question_scores
+        return question_logits
 
     def select_question(self):
-        """Filters out already asked questions and selects the highest scoring question"""
+        """Filters out already asked questions before applying softmax
+        so the remaining probabilities are only valid selections"""
 
-        question_scores = self.get_question_scores()
+        # Get raw logits from NN1
+        question_logits = self.get_question_logits()
 
+        masked_logits = question_logits.copy()
+
+        # Mask questions that have already been asked
+        # -np.inf (neg infinity) ensures masked questions have a probability of 0 after softmax
+        for question_index, question in enumerate(self.game_state.question_tracker):
+            if self.game_state.question_tracker[question] != "not_asked":
+                masked_logits[question_index] = -np.inf
+
+        # Only questions that haven't been asked get a probability (not == 0)
+        question_probabilities = softmax(masked_logits)
+
+        # Test
+        print("Question probabilities:", question_probabilities)
+        print("Sum:", np.sum(question_probabilities))
+
+        # Match each question with its probability
         ranked_questions = {}
-        question_scores_index = 0
 
-        # Filters out already asked questions
-        for question in self.game_state.question_tracker:
+        for question_index, question in enumerate(self.game_state.question_tracker):
+            ranked_questions[question] = question_probabilities[question_index]
 
-            if self.game_state.question_tracker[question] == "not_asked":
-                ranked_questions[question] = question_scores[question_scores_index]
-            else:
-                ranked_questions[question] = 0
-
-            question_scores_index += 1
-
-        # Gets the key for the question with the highest score
         question_to_ask = max(ranked_questions, key=ranked_questions.get)
 
-        # Provides selected_action to RewardSystem, round_data dictionary
-        self.reward_system.round_data[self.game_state.questions_asked + 1]["selected_action"] \
-            = list(QUESTIONS).index(question_to_ask)
+        self.reward_system.round_data[self.game_state.questions_asked + 1]["outputs"] = question_probabilities
+
+        # Test:
+        print("Selected question:", question_to_ask)
 
         return question_to_ask
 

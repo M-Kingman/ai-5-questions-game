@@ -15,7 +15,6 @@ rng = np.random.default_rng()
 def sigmoid(weighted_sum):
     return 1 / (1 + np.exp(-weighted_sum))
 
-
 class QuestionSelector:
     """Predicts the next best question to ask"""
 
@@ -36,7 +35,7 @@ class QuestionSelector:
 
         # Layer 2 - Output layer
         weighted_sum2 = np.dot(activation1, self.output_weights) + self.output_bias
-        activation2 = sigmoid(weighted_sum2)
+        activation2 = weighted_sum2
 
         # Stores data for backpropagation
         cache = {
@@ -46,10 +45,10 @@ class QuestionSelector:
             "activation2": activation2,
         }
 
-        # Reassigned for easier reading
-        question_scores = activation2
+        # Raw output values for each question
+        question_logits = activation2
 
-        return question_scores, cache
+        return question_logits, cache
 
     def calculate_loss(self, prediction, target):
         """Binary Cross-Entropy (BCE) - to calculate loss"""
@@ -147,8 +146,9 @@ class QuestionSelector:
 test_nn = QuestionSelector()
 random_test_data = rng.uniform(low=0.0, high=1, size=313)
 results, cache = test_nn.forward_pass(random_test_data)
-random_target = (rng.uniform(low=0.1, high=0.9, size=14))
-backpropagation_data = test_nn.backpropagation(random_test_data, cache, random_target)
+# random_target = (rng.uniform(low=0.1, high=0.9, size=14))
+# backpropagation_data = test_nn.backpropagation(random_test_data, cache, random_target)
 
 print(f"Results of forward pass: \n{results}")
-print(f"Results of back propagation: \n{backpropagation_data}")
+print(f"sum of outputs: {np.sum(results)}")
+# print(f"Results of back propagation: \n{backpropagation_data}")

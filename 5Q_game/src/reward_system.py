@@ -144,7 +144,7 @@ class RewardSystem:
         round_points = N ** 2 * E * F
         self.elimination_points += round_points
 
-        self.round_data[self.game_state.questions_asked]["elimination_reward"] = round_points
+        self.round_data[self.game_state.questions_asked + 1]["elimination_reward"] = round_points
 
     def detected_objects_probabilities_before(self):
 
@@ -177,7 +177,7 @@ class RewardSystem:
 
         self.entropy_points += entropy_reward
 
-        self.round_data[self.game_state.questions_asked]["entropy_reward"] = entropy_reward
+        self.round_data[self.game_state.questions_asked + 1]["entropy_reward"] = entropy_reward
 
         # Test
         print(f"entropy_before: {entropy_before}")
